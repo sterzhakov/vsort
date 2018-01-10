@@ -1,0 +1,37 @@
+{
+  "name": "vsort",
+  "version": "1.0.0",
+  "description": "Sortable for any virtual dom.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sterjakovigor/vsort.git"
+  },
+  "keywords": [
+    "sortable",
+    "virtual",
+    "dom",
+    "sortable",
+    "virtual",
+    "sort",
+    "virtual",
+    "dom",
+    "sort"
+  ],
+  "author": "Igor Sterzhakov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sterjakovigor/vsort/issues"
+  },
+  "homepage": "https://github.com/sterjakovigor/vsort#readme",
+  "devDependencies": {
+    "jasmine": "^2.8.0",
+    "vqua": "^1.0.27"
+  },
+  "dependencies": {
+    "berries": "^1.0.5"
+  }
+}

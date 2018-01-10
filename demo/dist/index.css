@@ -1,0 +1,56 @@
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+#app {
+  padding: 30px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.cursor-move {
+  cursor: move;
+}
+
+ul {
+  width: 200px;
+  margin: 0px;
+  padding: 0px;
+}
+
+li {
+  display: block;
+  padding: 5px 10px;
+  margin: 5px 5px 0px 0px;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #e2e2e2;
+  list-style: none;
+}
+
+.preview {
+  display: block;
+  float: left;
+}
+
+.vertical-list {
+  margin-right: 20px;
+}
+
+
+.horizontal-list li {
+  display: inline-block;
+}
+
+.sortable__ghost {
+  /* width: 200px; */
+  /* box-sizing: border-box; */
+}
