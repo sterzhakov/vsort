@@ -7,6 +7,9 @@ const createIsNewPosition = (memo) => {
     draggablePosition != droppablePosition
   )
 
+  if (isNewPosition)
+    console.log(memo.droppableNode)
+
   return Object.assign({}, memo, { isNewPosition })
 
 }

@@ -8,11 +8,12 @@ const createDroppablePosition = (memo) => {
     draggableNode,
     isDroppableNew,
     draggablePosition,
+    droppableGroup,
   } = memo
 
   if (!isDroppableNew) return memo
 
-  const sortableDomNodes = Array.from(config.rootNode.childNodes)
+  const sortableDomNodes = Array.from(droppableGroup.node.childNodes)
 
   const droppableIndex = sortableDomNodes
     .findIndex(domNode => domNode.isSameNode(droppableNode))

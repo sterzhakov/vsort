@@ -16,16 +16,16 @@ const createGhostCoords = (memo) => {
       const x = startUniversalEvent.pageX - draggableShift.x
       const y = startUniversalEvent.pageY - draggableShift.y
 
-      return Object.assign({}, memo, { draggableCoords: { x, y } })
+      return Object.assign({}, memo, { ghostCoords: { x, y } })
 
     }
 
     case DRAG_MOVE: {
 
-      const x = universalEvent.clientX - draggableShift.x
-      const y = universalEvent.clientY - draggableShift.y
+      const x = universalEvent.pageX - draggableShift.x
+      const y = universalEvent.pageY - draggableShift.y
 
-      return Object.assign({}, memo, { draggableCoords: { x, y } })
+      return Object.assign({}, memo, { ghostCoords: { x, y } })
 
     }
 

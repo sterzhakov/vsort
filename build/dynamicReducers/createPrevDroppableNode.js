@@ -2,14 +2,10 @@ const createPrevDroppableNode = (memo) => {
 
   const { droppableNode } = memo
 
-  if (droppableNode) {
+  if (!droppableNode) return memo
 
-    return Object.assign({}, memo, { prevDroppableNode: droppableNode })
-
-  }
-
-  return memo
-
+  return Object.assign({}, memo, { prevDroppableNode: droppableNode })
+  
 }
 
 module.exports = createPrevDroppableNode

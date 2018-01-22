@@ -1,50 +1,80 @@
-const B                        = require('berries')
-const findConfigErrors         = require('./core/findConfigErrors')
-const Stream                   = require('./core/Stream')
-const MousedownSource          = require('./sources/MousedownSource')
-const MousemoveSource          = require('./sources/MousemoveSource')
-const MouseupSource            = require('./sources/MouseupSource')
-const TouchstartSource         = require('./sources/TouchstartSource')
-const TouchmoveSource          = require('./sources/TouchmoveSource')
-const TouchendSource           = require('./sources/TouchendSource')
-const TouchcancelSource        = require('./sources/TouchcancelSource')
-const createHandlerNode        = require('./reducers/createHandlerNode')
-const createDraggableNode      = require('./reducers/createDraggableNode')
-const createUniversalEvent     = require('./reducers/createUniversalEvent')
-const createStartUniversalEvent
-  = require('./reducers/createStartUniversalEvent')
-const createDragStart          = require('./reducers/createDragStart')
-const createPrevDragStart      = require('./reducers/createPrevDragStart')
-const createDragType           = require('./reducers/createDragType')
-const createGhostNode          = require('./reducers/createGhostNode')
-const createDraggableShift     = require('./reducers/createDraggableShift')
-const createGhostCoords        = require('./reducers/createGhostCoords')
-const createDroppableNode      = require('./reducers/createDroppableNode')
-const createPrevDroppableNode  = require('./reducers/createPrevDroppableNode')
-const createDroppableAlign     = require('./reducers/createDroppableAlign')
-const createPrevDroppableAlign = require('./reducers/createPrevDroppableAlign')
-const createIsDroppableNew     = require('./reducers/createIsDroppableNew')
-const createDroppablePosition  = require('./reducers/createDroppablePosition')
-const createDraggablePosition  = require('./reducers/createDraggablePosition')
-const createIsNewPosition      = require('./reducers/createIsNewPosition')
-const createGhostRootNode      = require('./reducers/createGhostRootNode')
-const moveGhostNode            = require('./core/moveGhostNode')
+const B                 = require('berries')
+const findConfigErrors  = require('./core/findConfigErrors')
+const Stream            = require('./core/Stream')
+const moveGhostNode     = require('./core/moveGhostNode')
+const MousedownSource   = require('./sources/MousedownSource')
+const MousemoveSource   = require('./sources/MousemoveSource')
+const MouseupSource     = require('./sources/MouseupSource')
+const TouchstartSource  = require('./sources/TouchstartSource')
+const TouchmoveSource   = require('./sources/TouchmoveSource')
+const TouchendSource    = require('./sources/TouchendSource')
+const TouchcancelSource = require('./sources/TouchcancelSource')
+
+const staticReducers = [
+  require('./staticReducers/createGroups'),
+  require('./staticReducers/createRootGroup'),
+]
+
+const dynamicReducers = [
+  require('./dynamicReducers/createScrollActions'),
+  require('./dynamicReducers/createScrollDirections'),
+  require('./dynamicReducers/createPrevScrollDirections'),
+  require('./dynamicReducers/createIsNeedScroll'),
+  require('./dynamicReducers/createIsNewPosition'),
+  require('./dynamicReducers/createDroppablePosition'),
+  require('./dynamicReducers/createDraggablePosition'),
+  require('./dynamicReducers/createIsDroppableNew'),
+  require('./dynamicReducers/createDroppableAlign'),
+  require('./dynamicReducers/createPrevDroppableAlign'),
+  require('./dynamicReducers/createDroppableNode'),
+  require('./dynamicReducers/createDroppableGroup'),
+  require('./dynamicReducers/createDroppableTargetParentNodes'),
+  require('./dynamicReducers/createDroppableTargetNode'),
+  require('./dynamicReducers/createPrevDroppableNode'),
+  require('./dynamicReducers/createGhostCoords'),
+  require('./dynamicReducers/createDraggableShift'),
+  require('./dynamicReducers/createGhostRootNode'),
+  require('./dynamicReducers/createGhostNode'),
+  require('./dynamicReducers/createDragType'),
+  require('./dynamicReducers/createDragStart'),
+  require('./dynamicReducers/createPrevDragStart'),
+  require('./dynamicReducers/createHandlerNode'),
+  require('./dynamicReducers/createDraggableNode'),
+  require('./dynamicReducers/createRootGroup'),
+  require('./dynamicReducers/createStartUniversalEvent'),
+  require('./dynamicReducers/createUniversalEvent'),
+]
 
 const createSortable = (statedConfig = {}) => {
 
   const isDraggableNode = domNode => domNode.tagName == 'LI'
 
+  const isDroppableNode = (domNode, rootNode) => (
+    domNode &&
+    domNode.parentNode &&
+    domNode.parentNode.isSameNode(rootNode)
+  )
+
   const defaultConfig = {
+    name: 'root',
+    rootNode: null,
+    depends: [],
     align: 'vertical',
     dragStartDistance: 10,
     isDraggableNode,
     isHandlerNode: isDraggableNode,
+    isDroppableNode,
     ghostClassName: 'sortable__ghost',
     draggableClassName: 'sortable__draggable',
     ghostWrapperNode: document.body,
     touchEvents: true,
     mouseEvents: true,
     cloneRootNode: true,
+    scrollNode: null,
+    scrollFill: 50,
+    scrollSpeed: 5,
+    dynamicReducers: [],
+    staticReducers: [],
   }
 
   const config = Object.assign({}, defaultConfig, statedConfig)
@@ -63,47 +93,39 @@ const createSortable = (statedConfig = {}) => {
     new TouchcancelSource(document.body),
   )
 
+  const createInitialMemo = B.compose(
+    ...[
+      ...staticReducers,
+      ...config.staticReducers,
+    ]
+  )
+
+  const initialMemo = createInitialMemo({ config })
+
+  const createNewMemo = B.compose(
+    ...[
+      ...dynamicReducers,
+      ...config.dynamicReducers
+    ]
+  )
+
   return stream.reduce((memo, event) => {
 
     const initialValue = Object.assign({}, memo, { event })
 
-    const newMemo = B.compose(
-      createIsNewPosition,
-      createDroppablePosition,
-      createDraggablePosition,
-      createIsDroppableNew,
-      createDroppableAlign,
-      createPrevDroppableAlign,
-      createDroppableNode,
-      createPrevDroppableNode,
-      createGhostCoords,
-      createDraggableShift,
-      createGhostRootNode,
-      createGhostNode,
-      createDragType,
-      createDragStart,
-      createPrevDragStart,
-      createHandlerNode,
-      createDraggableNode,
-      createDragType,
-      createStartUniversalEvent,
-      createUniversalEvent,
-    )(initialValue)
+    const newMemo = createNewMemo(initialValue)
 
-    const { universalEvent } = newMemo
+    const { universalEvent, handlerNode } = newMemo
 
-    if (universalEvent.isTouch && universalEvent.cancelable) {
-
-      event.preventDefault() // disable double mouse/touch events and scroll
-
-    }
+    // disable double mouse/touch events and scroll
+    if (universalEvent.isTouch && universalEvent.cancelable && handlerNode)
+      event.preventDefault()
 
     moveGhostNode(newMemo)
-    // scrollParentContainer
 
     return newMemo
 
-  }, { config })
+  }, initialMemo)
 
 }
 

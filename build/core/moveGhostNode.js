@@ -8,7 +8,7 @@ const moveGhostNode = (memo) => {
     dragType,
     ghostNode,
     draggableNode,
-    draggableCoords,
+    ghostCoords,
     ghostRootNode,
   } = memo
 
@@ -30,14 +30,14 @@ const moveGhostNode = (memo) => {
 
       }
 
-      move(ghostNode, draggableCoords.x, draggableCoords.y)
+      move(ghostNode, ghostCoords.x, ghostCoords.y)
 
       break
     }
 
     case DRAG_MOVE: {
 
-      move(ghostNode, draggableCoords.x, draggableCoords.y)
+      move(ghostNode, ghostCoords.x, ghostCoords.y)
 
       break
     }

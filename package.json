@@ -28,10 +28,10 @@
   },
   "homepage": "https://github.com/sterjakovigor/vsort#readme",
   "devDependencies": {
-    "jasmine": "^2.8.0",
-    "vqua": "^1.0.27"
+    "jasmine": "^2.8.0"
   },
   "dependencies": {
-    "berries": "^1.0.5"
+    "berries": "^1.0.6",
+    "vqua": "^1.0.27"
   }
 }

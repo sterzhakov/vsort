@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 28);
+/******/ 	return __webpack_require__(__webpack_require__.s = 33);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -68,26 +68,27 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = {
-  asyncMap:       __webpack_require__(30),
-  clone:          __webpack_require__(31),
-  flatten:        __webpack_require__(16),
-  include:        __webpack_require__(9),
-  kindOf:         __webpack_require__(8),
-  pick:           __webpack_require__(32),
-  omit:           __webpack_require__(33),
-  union:          __webpack_require__(34),
-  capitalize:     __webpack_require__(35),
-  uncapitalize:   __webpack_require__(36),
-  classNames:     __webpack_require__(37),
-  first:          __webpack_require__(38),
-  last:           __webpack_require__(39),
-  intersect:      __webpack_require__(40),
-  times:          __webpack_require__(41),
-  findRightIndex: __webpack_require__(42),
-  compose:        __webpack_require__(43),
-  htmlQuotes:     __webpack_require__(44),
-  nth:            __webpack_require__(45),
-  move:           __webpack_require__(46),
+  asyncMap:       __webpack_require__(35),
+  clone:          __webpack_require__(36),
+  flatten:        __webpack_require__(21),
+  include:        __webpack_require__(13),
+  kindOf:         __webpack_require__(12),
+  pick:           __webpack_require__(37),
+  omit:           __webpack_require__(38),
+  union:          __webpack_require__(39),
+  capitalize:     __webpack_require__(40),
+  uncapitalize:   __webpack_require__(41),
+  classNames:     __webpack_require__(42),
+  first:          __webpack_require__(43),
+  last:           __webpack_require__(44),
+  intersect:      __webpack_require__(45),
+  times:          __webpack_require__(46),
+  findRightIndex: __webpack_require__(47),
+  compose:        __webpack_require__(48),
+  htmlQuotes:     __webpack_require__(49),
+  nth:            __webpack_require__(50),
+  move:           __webpack_require__(51),
+  insert:         __webpack_require__(52),
 }
 
 
@@ -117,6 +118,17 @@ module.exports = {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+  Component: __webpack_require__(34),
+  html: __webpack_require__(79),
+  render: __webpack_require__(81),
+}
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 class EventSource {
@@ -175,25 +187,54 @@ module.exports = EventSource
 
 
 /***/ }),
-/* 4 */
+/* 5 */
+/***/ (function(module, exports) {
+
+const findParentNodes = (domNode, isRootNode, domNodes = []) => {
+
+  if (isRootNode(domNode)) {
+
+    return [ ...domNodes, domNode ]
+
+  } else
+
+  if (!domNode.parentNode) {
+
+    return []
+
+  } else {
+
+    const newDomNodes = [ ...domNodes, domNode ]
+
+    return findParentNodes(domNode.parentNode, isRootNode, newDomNodes)
+
+  }
+
+}
+
+module.exports = findParentNodes
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { removeRef } = __webpack_require__(12)
-const eachNodes = __webpack_require__(13)
-const isNodeForUnmount = __webpack_require__(84)
+const { removeRef } = __webpack_require__(15)
+const eachNodes = __webpack_require__(16)
+const isNodeForUnmount = __webpack_require__(58)
 
 const { INSTANCE_TYPE } = __webpack_require__(1)
 
 const {
   callBeforeMount, callBeforeUnmount, callBeforeUpdate,
   callAfterUpdate, callAfterMount
-} = __webpack_require__(85)
+} = __webpack_require__(59)
 
 
 const {
   BEFORE_EACH_ITERATION, ON_INSTANCE_CREATE,
   BEFORE_INSTANCE_UPDATE, AFTER_DOM_CREATE
-} = __webpack_require__(5)
+} = __webpack_require__(7)
 
 module.exports = (action, liveNode, templateNode, context) => {
 
@@ -283,7 +324,7 @@ module.exports = (action, liveNode, templateNode, context) => {
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -295,10 +336,10 @@ module.exports = {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const mapNodes = __webpack_require__(14)
+const mapNodes = __webpack_require__(17)
 
 module.exports = (nodes, instance) => {
 
@@ -323,7 +364,7 @@ module.exports = (nodes, instance) => {
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -336,7 +377,78 @@ module.exports = {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { Component, html } = __webpack_require__(3)
+
+class List extends Component {
+
+  render() {
+
+    const { ul, li, span } = html
+
+    return (
+      ul({
+        ref: 'list',
+        class: 'sort noselect',
+      },
+        this.props.items.map((item) => {
+          return (
+            li({
+              class: 'sort__item',
+              key: item.id.toString()
+            },
+              span({
+                class: 'sort__icon cursor-move'
+              },
+                '#'
+              ),
+              ' ',
+              item.name,
+            )
+          )
+        })
+      )
+    )
+
+  }
+
+}
+
+module.exports = List
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { Component, html } = __webpack_require__(3)
+
+class Preview extends Component {
+
+  render() {
+
+    const { div, p, h2 } = html
+
+    return (
+      div({ class: 'preview' },
+        h2({},
+          this.props.name
+        ),
+        this.props.childs
+      )
+    )
+
+  }
+
+}
+
+module.exports = Preview
+
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports) {
 
 const checkers = {
@@ -387,7 +499,7 @@ module.exports = kindOf
 
 
 /***/ }),
-/* 9 */
+/* 13 */
 /***/ (function(module, exports) {
 
 const include = (array, value) => {
@@ -398,36 +510,7 @@ module.exports = include
 
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-const findParentNodes = (domNode, isRootNode, domNodes = []) => {
-
-  if (isRootNode(domNode)) {
-
-    return [ ...domNodes, domNode ]
-
-  } else
-
-  if (!domNode.parentNode) {
-
-    return []
-
-  } else {
-
-    const newDomNodes = [ ...domNodes, domNode ]
-
-    return findParentNodes(domNode.parentNode, isRootNode, newDomNodes)
-
-  }
-
-}
-
-module.exports = findParentNodes
-
-
-/***/ }),
-/* 11 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {
@@ -460,7 +543,7 @@ module.exports = (nodes) => {
 
 
 /***/ }),
-/* 12 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
@@ -485,7 +568,7 @@ module.exports = { addRef, removeRef }
 
 
 /***/ }),
-/* 13 */
+/* 16 */
 /***/ (function(module, exports) {
 
 const loop = (node, callback, level = 0, index = 0) => {
@@ -520,7 +603,7 @@ module.exports = loop
 
 
 /***/ }),
-/* 14 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
@@ -562,7 +645,7 @@ module.exports = loop
 
 
 /***/ }),
-/* 15 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -576,7 +659,217 @@ module.exports = {
 
 
 /***/ }),
-/* 16 */
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+
+const NAMES = [
+  { id: 0, name: "Kali Volkman"},
+  { id: 1, name: "Eino Bailey Jr."},
+  { id: 2, name: "Pink Parisian"},
+  { id: 3, name: "Ophelia Robel MD"},
+  { id: 4, name: "Ocie Lehner"},
+  { id: 5, name: "Jerrell Crist"},
+  { id: 6, name: "Ole Gerhold"},
+  { id: 7, name: "Miss June Rutherford"},
+  { id: 8, name: "Clinton Hirthe"},
+  { id: 9, name: "Russell Blanda"},
+  { id: 10, name: "Christop Dickens"},
+  { id: 11, name: "Ms. Peggie Morar"},
+  { id: 12, name: "Isabel Hamill"},
+  { id: 13, name: "Blanche Konopelski"},
+  { id: 14, name: "Cindy Towne"},
+  { id: 15, name: "Maybell Hettinger"},
+  { id: 16, name: "Fleta Ortiz"},
+  { id: 17, name: "Robyn Cartwright"},
+  { id: 18, name: "Shanon Heidenreich"},
+  { id: 19, name: "Bethany Parker"},
+  { id: 20, name: "Dana Murazik"},
+  { id: 21, name: "Angel Witting"},
+  { id: 22, name: "Mikel Powlowski"},
+  { id: 23, name: "Mathew Bernier"},
+  { id: 24, name: "Alessandro Weimann"},
+  { id: 25, name: "Mrs. Candelario Heller"},
+  { id: 26, name: "Walton Bogisich I"},
+  { id: 27, name: "Darrel Bashirian DDS"},
+  { id: 28, name: "Mr. Gerhard D'Amore"},
+  { id: 29, name: "Kory Harber IV"},
+  { id: 30, name: "Mr. Cathy White"},
+  { id: 31, name: "Colleen Okuneva"},
+  { id: 32, name: "Jairo Schmidt"},
+  { id: 33, name: "Ms. Christelle Mueller"},
+  { id: 34, name: "Mr. Ralph Yost"},
+  { id: 35, name: "Mike Rodriguez V"},
+  { id: 36, name: "Enrico Considine DDS"},
+  { id: 37, name: "Rosemary Grady"},
+  { id: 38, name: "Julianne Fahey"},
+  { id: 39, name: "Tyrese Brekke"},
+  { id: 40, name: "Gerry Lindgren"},
+  { id: 41, name: "Mr. Alanis Sawayn"},
+  { id: 42, name: "Gerda Raynor"},
+  { id: 43, name: "Ms. Lela Windler"},
+  { id: 44, name: "Green Cummings"},
+  { id: 45, name: "Thelma Cassin"},
+  { id: 46, name: "Delaney Ruecker"},
+  { id: 47, name: "Mustafa Daniel"},
+  { id: 48, name: "Cali Collins DVM"},
+  { id: 49, name: "Dakota Fay"}
+]
+
+class User {
+
+  static getAll() {
+
+    return NAMES
+
+  }
+
+}
+
+module.exports = User
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B                 = __webpack_require__(0)
+const findConfigErrors  = __webpack_require__(89)
+const Stream            = __webpack_require__(90)
+const moveGhostNode     = __webpack_require__(91)
+const MousedownSource   = __webpack_require__(93)
+const MousemoveSource   = __webpack_require__(94)
+const MouseupSource     = __webpack_require__(95)
+const TouchstartSource  = __webpack_require__(96)
+const TouchmoveSource   = __webpack_require__(97)
+const TouchendSource    = __webpack_require__(98)
+const TouchcancelSource = __webpack_require__(99)
+
+const staticReducers = [
+  __webpack_require__(135),
+  __webpack_require__(163),
+]
+
+const dynamicReducers = [
+  __webpack_require__(136),
+  __webpack_require__(137),
+  __webpack_require__(138),
+  __webpack_require__(139),
+  __webpack_require__(140),
+  __webpack_require__(141),
+  __webpack_require__(142),
+  __webpack_require__(143),
+  __webpack_require__(144),
+  __webpack_require__(145),
+  __webpack_require__(146),
+  __webpack_require__(147),
+  __webpack_require__(148),
+  __webpack_require__(149),
+  __webpack_require__(150),
+  __webpack_require__(151),
+  __webpack_require__(152),
+  __webpack_require__(153),
+  __webpack_require__(154),
+  __webpack_require__(155),
+  __webpack_require__(156),
+  __webpack_require__(157),
+  __webpack_require__(158),
+  __webpack_require__(159),
+  __webpack_require__(160),
+  __webpack_require__(161),
+  __webpack_require__(162),
+]
+
+const createSortable = (statedConfig = {}) => {
+
+  const isDraggableNode = domNode => domNode.tagName == 'LI'
+
+  const isDroppableNode = (domNode, rootNode) => (
+    domNode &&
+    domNode.parentNode &&
+    domNode.parentNode.isSameNode(rootNode)
+  )
+
+  const defaultConfig = {
+    name: 'root',
+    rootNode: null,
+    depends: [],
+    align: 'vertical',
+    dragStartDistance: 10,
+    isDraggableNode,
+    isHandlerNode: isDraggableNode,
+    isDroppableNode,
+    ghostClassName: 'sortable__ghost',
+    draggableClassName: 'sortable__draggable',
+    ghostWrapperNode: document.body,
+    touchEvents: true,
+    mouseEvents: true,
+    cloneRootNode: true,
+    scrollNode: null,
+    scrollFill: 50,
+    scrollSpeed: 5,
+    dynamicReducers: [],
+    staticReducers: [],
+  }
+
+  const config = Object.assign({}, defaultConfig, statedConfig)
+
+  const configErrors = findConfigErrors(config)
+
+  if (configErrors.length) throw new Error(configErrors.join('. '))
+
+  const stream = new Stream(
+    new MousedownSource(config.rootNode),
+    new MousemoveSource(document.body),
+    new MouseupSource(document.body),
+    new TouchstartSource(config.rootNode),
+    new TouchmoveSource(document.body),
+    new TouchendSource(document.body),
+    new TouchcancelSource(document.body),
+  )
+
+  const createInitialMemo = B.compose(
+    ...[
+      ...staticReducers,
+      ...config.staticReducers,
+    ]
+  )
+
+  const initialMemo = createInitialMemo({ config })
+
+  const createNewMemo = B.compose(
+    ...[
+      ...dynamicReducers,
+      ...config.dynamicReducers
+    ]
+  )
+
+  return stream.reduce((memo, event) => {
+
+    const initialValue = Object.assign({}, memo, { event })
+
+    const newMemo = createNewMemo(initialValue)
+
+    const { universalEvent, handlerNode } = newMemo
+
+    // disable double mouse/touch events and scroll
+    if (universalEvent.isTouch && universalEvent.cancelable && handlerNode)
+      event.preventDefault()
+
+    moveGhostNode(newMemo)
+
+    return newMemo
+
+  }, initialMemo)
+
+}
+
+module.exports = createSortable
+
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports) {
 
 const flatten = (items, newItems = []) => {
@@ -604,28 +897,7 @@ module.exports = flatten
 
 
 /***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-const getShift = (domNode, event) => {
-
-  const boundings = domNode.getBoundingClientRect()
-
-  const pageX = boundings.left + window.pageXOffset
-  const pageY = boundings.top + window.pageYOffset
-
-  const shiftX = event.pageX - pageX
-  const shiftY = event.pageY - pageY
-
-  return { x: shiftX, y: shiftY }
-
-}
-
-module.exports = getShift
-
-
-/***/ }),
-/* 18 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
@@ -708,16 +980,16 @@ module.exports = loop
 
 
 /***/ }),
-/* 19 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
-const createNodes = __webpack_require__(79)
-const createCallback = __webpack_require__(80)
-const { sortLiveNodes, sortTemplateNodes } = __webpack_require__(21)
-const decorateNodes = __webpack_require__(22)
-const createNodesWithRefs = __webpack_require__(6)
-const createTextNodes = __webpack_require__(90)
+const createNodes = __webpack_require__(53)
+const createCallback = __webpack_require__(54)
+const { sortLiveNodes, sortTemplateNodes } = __webpack_require__(25)
+const decorateNodes = __webpack_require__(26)
+const createNodesWithRefs = __webpack_require__(8)
+const createTextNodes = __webpack_require__(64)
 
 module.exports = (liveNodes, templateNodes, options = {}) => {
 
@@ -759,7 +1031,7 @@ module.exports = (liveNodes, templateNodes, options = {}) => {
 
 
 /***/ }),
-/* 20 */
+/* 24 */
 /***/ (function(module, exports) {
 
 module.exports = (error, errorExists, errorNotExists) => {
@@ -778,7 +1050,7 @@ module.exports = (error, errorExists, errorNotExists) => {
 
 
 /***/ }),
-/* 21 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
@@ -913,7 +1185,7 @@ module.exports = {
 
 
 /***/ }),
-/* 22 */
+/* 26 */
 /***/ (function(module, exports) {
 
 module.exports = (nodes, { dom = false, order = false }) => {
@@ -952,7 +1224,7 @@ module.exports = (nodes, { dom = false, order = false }) => {
 
 
 /***/ }),
-/* 23 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
@@ -1012,15 +1284,15 @@ module.exports = loop
 
 
 /***/ }),
-/* 24 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { sortLiveNodes } = __webpack_require__(21)
-const reorderDeletedLiveNodes = __webpack_require__(93)
-const reorderAddedLiveNodes = __webpack_require__(94)
-const decorateNodes = __webpack_require__(22)
-const createNodes = __webpack_require__(95)
-const createCallback = __webpack_require__(96)
+const { sortLiveNodes } = __webpack_require__(25)
+const reorderDeletedLiveNodes = __webpack_require__(67)
+const reorderAddedLiveNodes = __webpack_require__(68)
+const decorateNodes = __webpack_require__(26)
+const createNodes = __webpack_require__(69)
+const createCallback = __webpack_require__(70)
 
 module.exports = ({ offset, liveNodes, templateNodes, domNodes }) => {
 
@@ -1076,11 +1348,11 @@ module.exports = ({ offset, liveNodes, templateNodes, domNodes }) => {
 
 
 /***/ }),
-/* 25 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const updateDomNode = __webpack_require__(100)
-const updateNodes = __webpack_require__(104)
+const updateDomNode = __webpack_require__(74)
+const updateNodes = __webpack_require__(78)
 
 module.exports = ({ parentDomNode, patchNodes }) => {
 
@@ -1090,10 +1362,10 @@ module.exports = ({ parentDomNode, patchNodes }) => {
 
 
 /***/ }),
-/* 26 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const events = __webpack_require__(27)
+const events = __webpack_require__(31)
 
 module.exports = (props) => {
 
@@ -1135,7 +1407,7 @@ module.exports = (props) => {
 
 
 /***/ }),
-/* 27 */
+/* 31 */
 /***/ (function(module, exports) {
 
 // https://www.w3schools.com/jsref/dom_obj_event.asp
@@ -1259,11 +1531,32 @@ module.exports = {
 
 
 /***/ }),
-/* 28 */
+/* 32 */
+/***/ (function(module, exports) {
+
+const getShift = (domNode, event) => {
+
+  const boundings = domNode.getBoundingClientRect()
+
+  const pageX = boundings.left + window.pageXOffset
+  const pageY = boundings.top + window.pageYOffset
+
+  const shiftX = event.pageX - pageX
+  const shiftY = event.pageY - pageY
+
+  return { x: shiftX, y: shiftY }
+
+}
+
+module.exports = getShift
+
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { render } = __webpack_require__(77)
-const App = __webpack_require__(112)
+const { render } = __webpack_require__(3)
+const App = __webpack_require__(86)
 
 const $app = document.getElementById('app')
 
@@ -1271,1739 +1564,25 @@ render($app, [], [App.v()])
 
 
 /***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const B                        = __webpack_require__(0)
-const findConfigErrors         = __webpack_require__(47)
-const Stream                   = __webpack_require__(48)
-const MousedownSource          = __webpack_require__(49)
-const MousemoveSource          = __webpack_require__(50)
-const MouseupSource            = __webpack_require__(51)
-const TouchstartSource         = __webpack_require__(52)
-const TouchmoveSource          = __webpack_require__(53)
-const TouchendSource           = __webpack_require__(54)
-const TouchcancelSource        = __webpack_require__(55)
-const createHandlerNode        = __webpack_require__(56)
-const createDraggableNode      = __webpack_require__(57)
-const createUniversalEvent     = __webpack_require__(58)
-const createStartUniversalEvent
-  = __webpack_require__(60)
-const createDragStart          = __webpack_require__(61)
-const createPrevDragStart      = __webpack_require__(62)
-const createDragType           = __webpack_require__(63)
-const createGhostNode          = __webpack_require__(64)
-const createDraggableShift     = __webpack_require__(65)
-const createGhostCoords        = __webpack_require__(66)
-const createDroppableNode      = __webpack_require__(67)
-const createPrevDroppableNode  = __webpack_require__(68)
-const createDroppableAlign     = __webpack_require__(69)
-const createPrevDroppableAlign = __webpack_require__(71)
-const createIsDroppableNew     = __webpack_require__(72)
-const createDroppablePosition  = __webpack_require__(73)
-const createDraggablePosition  = __webpack_require__(74)
-const createIsNewPosition      = __webpack_require__(113)
-const createGhostRootNode      = __webpack_require__(115)
-const moveGhostNode            = __webpack_require__(75)
-
-const createSortable = (statedConfig = {}) => {
-
-  const isDraggableNode = domNode => domNode.tagName == 'LI'
-
-  const defaultConfig = {
-    align: 'vertical',
-    dragStartDistance: 10,
-    isDraggableNode,
-    isHandlerNode: isDraggableNode,
-    ghostClassName: 'sortable__ghost',
-    draggableClassName: 'sortable__draggable',
-    ghostWrapperNode: document.body,
-    touchEvents: true,
-    mouseEvents: true,
-    cloneRootNode: true,
-  }
-
-  const config = Object.assign({}, defaultConfig, statedConfig)
-
-  const configErrors = findConfigErrors(config)
-
-  if (configErrors.length) throw new Error(configErrors.join('. '))
-
-  const stream = new Stream(
-    new MousedownSource(config.rootNode),
-    new MousemoveSource(document.body),
-    new MouseupSource(document.body),
-    new TouchstartSource(config.rootNode),
-    new TouchmoveSource(document.body),
-    new TouchendSource(document.body),
-    new TouchcancelSource(document.body),
-  )
-
-  return stream.reduce((memo, event) => {
-
-    const initialValue = Object.assign({}, memo, { event })
-
-    const newMemo = B.compose(
-      createIsNewPosition,
-      createDroppablePosition,
-      createDraggablePosition,
-      createIsDroppableNew,
-      createDroppableAlign,
-      createPrevDroppableAlign,
-      createDroppableNode,
-      createPrevDroppableNode,
-      createGhostCoords,
-      createDraggableShift,
-      createGhostRootNode,
-      createGhostNode,
-      createDragType,
-      createDragStart,
-      createPrevDragStart,
-      createHandlerNode,
-      createDraggableNode,
-      createDragType,
-      createStartUniversalEvent,
-      createUniversalEvent,
-    )(initialValue)
-
-    const { universalEvent } = newMemo
-
-    if (universalEvent.isTouch && universalEvent.cancelable) {
-
-      event.preventDefault() // disable double mouse/touch events and scroll
-
-    }
-
-    moveGhostNode(newMemo)
-    // scrollParentContainer
-
-    return newMemo
-
-  }, { config })
-
-}
-
-module.exports = createSortable
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports) {
-
-module.exports = (items, mapper, callback) => {
-
-  if (items.length == 0) return callback(null, [])
-
-  let counter = 0
-
-  let results = []
-
-  items.forEach((item, index) => {
-
-    new Promise((resolve, reject) => {
-
-      mapper(item, index, (error, result) => {
-
-        if (error) {
-
-          reject(error)
-
-        } else {
-
-          resolve(result)
-
-        }
-
-      })
-
-    }).then((result) => {
-
-      results[index] = result
-
-      if (items.length == ++counter)
-        callback(null, results)
-
-    }).catch((error) => {
-
-      callback(error, null)
-
-    })
-
-  })
-
-}
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const kindOf = __webpack_require__(8)
-const include = __webpack_require__(9)
-
-const clone = (argument) => {
-
-  const argumentType = kindOf(argument)
-
-
-  if (argumentType == 'object') {
-
-    const object = argument
-
-    const newObject = {}
-
-    for (const key in object) {
-
-      const value = object[key]
-
-      const valueType = kindOf(value)
-
-      if (include(['array','object'], valueType)) {
-
-        newObject[key] = clone(value)
-
-      } else {
-
-        newObject[key] = value
-
-      }
-
-    }
-
-    return newObject
-
-  } else
-
-
-  if (argumentType == 'array') {
-
-    const array = argument
-
-    const newArray = []
-
-    for (const value of array) {
-
-      const valueType = kindOf(value)
-
-      if (include(['array','object'], valueType)) {
-
-        newArray.push(clone(value))
-
-      } else {
-
-        newArray.push(value)
-
-      }
-
-    }
-
-    return newArray
-
-
-  } else {
-
-    throw new Error('Cloned argument should be type of Array or Object.')
-
-  }
-
-}
-
-module.exports = clone
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports) {
-
-const pick = (object, ...keys) => {
-  const newObject = {}
-  keys.forEach((key) => {
-    if (key in object)
-      newObject[key] = object[key]
-  })
-  return newObject
-}
-
-module.exports = pick
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports) {
-
-const omit = (object, ...keys) => {
-  const newObject = {}
-  Object.keys(object).forEach((key) => {
-    if (keys.indexOf(key) == -1)
-      newObject[key] = object[key]
-  })
-  return newObject
-
-}
-
-module.exports = omit
-
-
-/***/ }),
 /* 34 */
-/***/ (function(module, exports) {
-
-const union = (first, second) => {
-  return first.concat(
-    second.filter((key) => first.indexOf(key) == -1)
-  )
-}
-
-module.exports = union
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports) {
-
-module.exports = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1)
-}
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports) {
-
-module.exports = (string) => {
-
-  return string.charAt(0).toLowerCase() + string.slice(1)
-
-}
-
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const flatten = __webpack_require__(16)
-const kindOf = __webpack_require__(8)
-const include = __webpack_require__(9)
-
-module.exports = (...args) => {
-
-  const unpackObjects = (args) => {
-
-    return args.map((arg) => {
-
-      const argType = kindOf(arg)
-
-      if (argType == 'array') {
-
-        return unpackObjects(arg)
-
-      } else
-
-      if (argType == 'object') {
-
-        return Object.keys(arg).map((key) => {
-
-          return arg[key] ? key : false
-
-        })
-
-      } else {
-
-        return arg
-
-      }
-
-    })
-
-  }
-
-  return (
-    flatten( unpackObjects(args) )
-      .filter((arg) => {
-        return include(['number', 'string'], typeof arg)
-      })
-      .join(' ')
-  )
-
-}
-
-
-// const flattenNames = flatten(args)
-//
-// const objectNames = flattenNames.map((arg) => {
-//
-//   if(kindOf(arg) == 'object') {
-//
-//     Object.keys(arg).map((key) => {
-//
-//       if (arg[key]) {
-//
-//         return key
-//
-//       }
-//
-//       return false
-//
-//     })
-//
-//   }
-//
-//   return arg
-//
-// })
-//
-// const cleanedClassNames =
-//
-// return classNames..join(' ')
-
-
-/***/ }),
-/* 38 */
-/***/ (function(module, exports) {
-
-module.exports = (array) => {
-
-  return array[0]
-
-}
-
-
-/***/ }),
-/* 39 */
-/***/ (function(module, exports) {
-
-module.exports = (array) => {
-
-  return array[array.length - 1]
-
-}
-
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports) {
-
-module.exports = (left, right) => {
-
-  if (!Array.isArray(left) || !Array.isArray(right)) return null
-
-  return left.reduce((values, value) => {
-
-    return right.indexOf(value) > -1
-      ? [ ...values, value ]
-      : values
-
-  }, [])
-
-}
-
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports) {
-
-module.exports = (count) => {
-
-  return [...Array(count).keys()]
-
-}
-
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports) {
-
-module.exports = (items, match) => {
-
-  const loop = (items, index) => {
-
-    if (index == -1) return -1
-
-    return match(items[index])
-      ? index
-      : loop(items, index - 1)
-  }
-
-  return loop(items, items.length - 1)
-
-}
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports) {
-
-module.exports = (...methods) => {
-
-  return (result) => {
-
-    return methods.reduceRight((result, method) => {
-
-      return method(result)
-
-    }, result)
-
-  }
-
-}
-
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports) {
-
-const OPEN_QUOTE_SPECIAL = '&lt;'
-const CLOSE_QUOTE_SPECIAL = '&gt;'
-
-const OPEN_QUOTE_SIMPLE = '<'
-const CLOSE_QUOTE_SIMPLE = '>'
-
-const SPECIAL_TO_SIMPLE = {
-  [OPEN_QUOTE_SPECIAL]:  OPEN_QUOTE_SIMPLE,
-  [CLOSE_QUOTE_SPECIAL]: CLOSE_QUOTE_SIMPLE
-}
-
-const SIMPLE_TO_SPECIAL = {
-  [OPEN_QUOTE_SIMPLE]:  OPEN_QUOTE_SPECIAL,
-  [CLOSE_QUOTE_SIMPLE]: CLOSE_QUOTE_SPECIAL
-}
-
-const SIMPLE_QUOTES =
-  new RegExp(OPEN_QUOTE_SIMPLE + '|' + CLOSE_QUOTE_SIMPLE, 'g')
-
-const SPECIAL_QUOTES =
-  new RegExp(OPEN_QUOTE_SPECIAL + '|' + CLOSE_QUOTE_SPECIAL, 'g')
-
-const encode = (string) => (
-  string.replace(SIMPLE_QUOTES, match => SIMPLE_TO_SPECIAL[match])
-)
-
-const decode = (string) => (
-  string.replace(SPECIAL_QUOTES, match => SPECIAL_TO_SIMPLE[match])
-)
-
-module.exports = { encode, decode }
-
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports) {
-
-module.exports = (items, index) => {
-
-  if (index >= 0) {
-
-    return items[index]
-
-  } else {
-
-    return items[items.length + index]
-
-  }
-
-}
-
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports) {
-
-const move = (items, from, to) => {
-
-  const itemsWithoutFrom = [
-    ...items.slice(0, from),
-    ...items.slice(from + 1),
-  ]
-
-  return [
-    ...itemsWithoutFrom.slice(0, to),
-    items[from],
-    ...itemsWithoutFrom.slice(to),
-  ]
-
-}
-
-module.exports = move
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports) {
-
-const rules = [
-  {
-    check: config => !(config.rootNode instanceof HTMLElement),
-    message: 'config.rootNode is not a HTMLElement'
-  }
-]
-
-const findConfigErrors = config => {
-
-  return rules.reduce((messages, rule) => {
-
-    if (rule.check(config)) return [ ...messages, rule.message ]
-
-    return messages
-
-  }, [])
-
-}
-
-module.exports = findConfigErrors
-
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports) {
-
-class Stream {
-
-  constructor(...sources) {
-
-    const grouppedSources = sources.reduce((memo, source) => {
-
-      const key = this.isDynamicSource(source)
-        ? 'dynamicSources'
-        : 'staticSources'
-
-      return Object.assign({}, memo, { [key]: [ ...memo[key], source ] })
-
-    }, { staticSources: [], dynamicSources: [] })
-
-    this.staticSources = grouppedSources.staticSources
-    this.dynamicSources = grouppedSources.dynamicSources
-
-    this.modifiers = []
-    this.value = null
-
-  }
-
-  subscribe(onChange) {
-
-    this.onChange = onChange
-
-    this.staticSources.forEach(source => {
-
-      source.listen()
-      source.addSubscriber(this)
-
-    })
-
-  }
-
-  isDynamicSource(source) {
-
-    return 'addWhen' in source || 'removeWhen' in source
-
-  }
-
-  unsubscribe() {
-
-    const sources = [ ...this.staticSources, ...this.dynamicSources ]
-
-    sources.forEach(source => source.mute())
-
-  }
-
-  notify(value) {
-
-    const newValue = this.modifiers.reduce((value, modifier) => {
-
-      if (modifier.type == 'reduce') {
-
-        return modifier.modify(this.value, value)
-
-      }
-
-      return value
-
-    }, value)
-
-    this.value = newValue
-
-    this.onChange(newValue)
-
-    this.manageDynamicSources(newValue)
-
-  }
-
-  manageDynamicSources(value) {
-
-    this.dynamicSources.forEach(dynamicSource => {
-
-      if (!dynamicSource.active && dynamicSource.addWhen(value)) {
-
-        dynamicSource.listen()
-        dynamicSource.addSubscriber(this)
-
-      }
-
-      if (dynamicSource.active && dynamicSource.removeWhen(value)) {
-
-        dynamicSource.mute()
-        dynamicSource.removeSubscriber(this)
-
-      }
-
-    })
-
-  }
-
-  reduce(callback, initialValue) {
-
-    this.value = initialValue
-
-    this.modifiers = [
-      ...this.modifiers,
-      { type: 'reduce', modify: callback }
-    ]
-
-    return this
-
-  }
-
-}
-
-module.exports = Stream
-
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const EventSource = __webpack_require__(3)
-
-class MousedownSource extends EventSource {
-
-  constructor(domNode, eventType = 'mousedown') {
-
-    super(domNode, eventType)
-
-  }
-
-}
-
-module.exports = MousedownSource
-
-
-/***/ }),
-/* 50 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const EventSource = __webpack_require__(3)
-
-class MousemoveSource extends EventSource {
-
-  constructor(domNode, eventType = 'mousemove') {
-
-    super(domNode, eventType)
-
-  }
-
-  addWhen(memo) {
-
-    return memo.event.type == 'mousedown'
-
-  }
-
-  removeWhen(memo) {
-
-    return memo.event.type == 'mouseup'
-
-  }
-
-}
-
-module.exports = MousemoveSource
-
-
-/***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const EventSource = __webpack_require__(3)
-
-class MouseupSource extends EventSource {
-
-  constructor(domNode, eventType = 'mouseup') {
-
-    super(domNode, eventType)
-
-  }
-
-  addWhen(memo) {
-
-    return memo.event.type == 'mousedown'
-
-  }
-
-  removeWhen(memo) {
-
-    return memo.event.type == 'mouseup'
-
-  }
-
-}
-
-module.exports = MouseupSource
-
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const EventSource = __webpack_require__(3)
-
-class TouchstartSource extends EventSource {
-
-  constructor(domNode, eventType = 'touchstart') {
-
-    super(domNode, eventType)
-
-  }
-
-}
-
-module.exports = TouchstartSource
-
-
-/***/ }),
-/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
-const EventSource = __webpack_require__(3)
-
-class TouchmoveSource extends EventSource {
-
-  constructor(domNode, eventType = 'touchmove', options = { passive: false }) {
-
-    super(domNode, eventType, options)
-
-  }
-
-
-  addWhen(memo) {
-
-    return memo.event.type == 'touchstart'
-
-  }
-
-  removeWhen(memo) {
-
-    return B.include(['touchend', 'touchcancel'], memo.event.type)
-
-  }
-
-}
-
-module.exports = TouchmoveSource
-
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const B = __webpack_require__(0)
-const EventSource = __webpack_require__(3)
-
-class TouchendSource extends EventSource {
-
-  constructor(domNode, eventType = 'touchend') {
-
-    super(domNode, eventType)
-
-  }
-
-
-  addWhen(memo) {
-
-    return memo.event.type == 'touchstart'
-
-  }
-
-  removeWhen(memo) {
-
-    return B.include(['touchend', 'touchcancel'], memo.event.type)
-
-  }
-
-}
-
-module.exports = TouchendSource
-
-
-/***/ }),
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const B = __webpack_require__(0)
-const EventSource = __webpack_require__(3)
-
-class TouchcancelSource extends EventSource {
-
-  constructor(domNode, eventType = 'touchcancel') {
-
-    super(domNode, eventType)
-
-  }
-
-
-  addWhen(memo) {
-
-    return memo.event.type == 'touchstart'
-
-  }
-
-  removeWhen(memo) {
-
-    return B.include(['touchend', 'touchcancel'], memo.event.type)
-
-  }
-
-}
-
-module.exports = TouchcancelSource
-
-
-/***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const B = __webpack_require__(0)
-const findParentNodes = __webpack_require__(10)
-
-const createHandlerNode = (memo) => {
-
-  const { universalEvent, config } = memo
-
-  switch (universalEvent.type) {
-
-    case 'start': {
-
-      const handlerNode = B.last(
-        findParentNodes(universalEvent.target, config.isHandlerNode)
-      )
-
-      return Object.assign({}, memo, { handlerNode })
-
-    }
-
-    case 'move':
-    case 'stop': {
-
-      return memo
-
-    }
-
-    default: {
-
-      throw new Error('Unknown universalEvent.type' + universalEvent.type)
-
-    }
-
-
-
-  }
-
-
-}
-
-module.exports = createHandlerNode
-
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const B = __webpack_require__(0)
-const findParentNodes = __webpack_require__(10)
-
-const createDraggableNode = (memo) => {
-
-  const { universalEvent, config } = memo
-
-  switch (universalEvent.type) {
-
-    case 'start': {
-
-      const draggableNode = B.last(
-        findParentNodes(universalEvent.target, config.isDraggableNode)
-      )
-
-      return Object.assign({}, memo, { draggableNode })
-
-    }
-
-    case 'move':
-    case 'stop': {
-
-      return memo
-
-    }
-
-    default: {
-
-      throw new Error('Unknown universalEvent.type' + universalEvent.type)
-
-    }
-
-
-
-  }
-
-
-}
-
-module.exports = createDraggableNode
-
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const getUniversalEventType = __webpack_require__(59)
-
-const createUniversalEvent = (memo) => {
-
-  const { event } = memo
-
-  const haveTargetTouches = event.targetTouches && event.targetTouches.length
-
-  const coords = haveTargetTouches
-    ? {
-        pageX: event.targetTouches[0].pageX,
-        pageY: event.targetTouches[0].pageY,
-        clientX: event.targetTouches[0].clientX,
-        clientY: event.targetTouches[0].clientY,
-      }
-    : {
-        pageX: event.pageX,
-        pageY: event.pageY,
-        clientX: event.clientX,
-        clientY: event.clientY,
-      }
-
-  const type = getUniversalEventType(event.type)
-  const isTouch = !!event.type.match(/^touch/)
-
-  const common = {
-    type,
-    isTouch,
-    haveTargetTouches,
-    cancelable: event.cancelable,
-    target: event.target,
-    originalEvent: event,
-  }
-
-  const universalEvent = Object.assign({}, coords, common)
-
-  return Object.assign({}, memo, { universalEvent })
-
-}
-
-module.exports = createUniversalEvent
-
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports) {
-
-const getUniversalEventType = (eventType) => {
-
-  switch (eventType) {
-
-    case 'mousedown':
-    case 'touchstart': {
-
-      return 'start'
-
-    }
-
-    case 'mousemove':
-    case 'touchmove': {
-
-      return 'move'
-
-    }
-
-    case 'touchcancel':
-    case 'touchend':
-    case 'mouseup': {
-
-      return 'stop'
-
-    }
-
-    default: {
-
-      throw new Error('Unknown event type')
-
-    }
-
-  }
-
-}
-
-module.exports = getUniversalEventType
-
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports) {
-
-const createStartUniversalEvent = (memo) => {
-
-  const { universalEvent } = memo
-
-  switch (universalEvent.type) {
-
-    case 'start': {
-
-      return Object.assign({}, memo, { startUniversalEvent: universalEvent })
-
-    }
-
-    case 'move':
-    case 'stop': {
-
-      return memo
-
-    }
-
-    default: {
-
-      throw new Error('Unknow universalEvent.type', universalEvent.type)
-
-    }
-
-  }
-
-}
-
-module.exports = createStartUniversalEvent
-
-
-/***/ }),
-/* 61 */
-/***/ (function(module, exports) {
-
-const createDragStart = (memo) => {
-
-  const { config, universalEvent, startUniversalEvent } = memo
-
-  switch (universalEvent.type) {
-
-    case 'start': {
-
-      return memo
-
-    }
-
-    case 'move': {
-
-      if (memo.dragStart) return memo
-
-      const diffX = Math.abs(
-        startUniversalEvent.clientX - universalEvent.clientX
-      )
-
-      const diffY = Math.abs(
-        startUniversalEvent.clientY - universalEvent.clientY
-      )
-
-      const dragStart = (
-        diffX > config.dragStartDistance ||
-        diffY > config.dragStartDistance
-      )
-
-      return Object.assign({}, memo, { dragStart })
-
-    }
-
-    case 'stop': {
-
-      return Object.assign({}, memo, { dragStart: false })
-
-    }
-
-    default: {
-
-      throw new Error('Unknown universalEvent.type: ' + universalEvent.type)
-
-    }
-
-  }
-
-}
-
-module.exports = createDragStart
-
-
-/***/ }),
-/* 62 */
-/***/ (function(module, exports) {
-
-const createPrevDragStart = (memo) => {
-
-  const { dragStart } = memo
-
-  return Object.assign({}, memo, { prevDragStart: dragStart })
-
-}
-
-module.exports = createPrevDragStart
-
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const B = __webpack_require__(0)
-const { DRAG_START, DRAG_STOP, DRAG_MOVE } = __webpack_require__(2)
-
-const createDragType = (memo) => {
-
-  const {
-    universalEvent,
-    handlerNode,
-    draggableNode,
-    dragStart,
-    prevDragStart
-  } = memo
-
-  switch (universalEvent.type) {
-
-    case 'start': {
-
-      return Object.assign({}, memo, { dragType: null })
-
-    }
-
-    case 'move': {
-
-      if (!dragStart || !handlerNode || !draggableNode) {
-
-        return Object.assign({}, memo, { dragType: null })
-
-      } else
-
-      if (dragStart && !prevDragStart) {
-
-        return Object.assign({}, memo, { dragType: DRAG_START })
-
-      } else {
-
-        return Object.assign({}, memo, { dragType: DRAG_MOVE })
-
-      }
-
-    }
-
-    case 'stop': {
-
-      if (!B.include([DRAG_MOVE, DRAG_STOP], memo.dragType)) return memo
-
-      return Object.assign({}, memo, { dragType: DRAG_STOP })
-
-    }
-
-    default: {
-
-      throw new Error('Unknow universalEvent.type: ' + universalEvent.type)
-
-    }
-
-  }
-
-}
-
-module.exports = createDragType
-
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const { DRAG_START } = __webpack_require__(2)
-
-const createGhostNode = (memo) => {
-
-  switch (memo.dragType) {
-
-    case DRAG_START: {
-
-      const { draggableNode, config } = memo
-
-      const ghostNode = draggableNode.cloneNode(true)
-
-      const boundings = draggableNode.getBoundingClientRect()
-
-      ghostNode.style.position = 'absolute'
-      ghostNode.style.zIndex = 1000
-      ghostNode.style.top = '0px'
-      ghostNode.style.left = '0px'
-      ghostNode.style.willChange = 'all'
-      ghostNode.style.pointerEvents = 'none'
-      ghostNode.classList.add(config.ghostClassName)
-
-      ghostNode.ondragstart = () => false
-
-      return Object.assign({}, memo, { ghostNode })
-
-    }
-
-    default: {
-
-      return memo
-
-    }
-
-  }
-
-
-}
-
-module.exports = createGhostNode
-
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const { DRAG_START } = __webpack_require__(2)
-const getShift = __webpack_require__(17)
-
-const createDraggableShift = (memo) => {
-
-  const { draggableNode, startUniversalEvent, config, dragType } = memo
-
-  if (dragType == DRAG_START) {
-
-    const draggableShift = getShift(draggableNode, startUniversalEvent)
-
-    return Object.assign({}, memo, { draggableShift })
-
-  }
-
-  return memo
-
-}
-
-module.exports = createDraggableShift
-
-
-/***/ }),
-/* 66 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const { DRAG_START, DRAG_MOVE, DRAG_STOP } = __webpack_require__(2)
-
-const createGhostCoords = (memo) => {
-
-  const {
-    startUniversalEvent,
-    universalEvent,
-    draggableShift,
-    dragType
-  } = memo
-
-  switch (dragType) {
-
-    case DRAG_START: {
-
-      const x = startUniversalEvent.pageX - draggableShift.x
-      const y = startUniversalEvent.pageY - draggableShift.y
-
-      return Object.assign({}, memo, { draggableCoords: { x, y } })
-
-    }
-
-    case DRAG_MOVE: {
-
-      const x = universalEvent.clientX - draggableShift.x
-      const y = universalEvent.clientY - draggableShift.y
-
-      return Object.assign({}, memo, { draggableCoords: { x, y } })
-
-    }
-
-    default: {
-
-      return memo
-
-    }
-
-  }
-
-}
-
-module.exports = createGhostCoords
-
-
-/***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const B = __webpack_require__(0)
-const { DRAG_MOVE } = __webpack_require__(2)
-const findParentNodes = __webpack_require__(10)
-
-const createDroppableNode = (memo) => {
-
-  const { config, dragType, ghostNode, universalEvent } = memo
-
-  if (dragType == DRAG_MOVE) {
-
-    const droppableTargetNode = document.elementFromPoint(
-      universalEvent.clientX,
-      universalEvent.clientY
-    )
-
-    if (!droppableTargetNode) return memo
-
-    const droppableNode = B.last(
-      findParentNodes(droppableTargetNode, domNode => (
-        domNode &&
-        domNode.parentNode &&
-        domNode.parentNode.isSameNode(config.rootNode)
-      ))
-    )
-
-    return Object.assign({}, memo, { droppableNode })
-
-  }
-
-  return memo
-
-}
-
-module.exports = createDroppableNode
-
-
-/***/ }),
-/* 68 */
-/***/ (function(module, exports) {
-
-const createPrevDroppableNode = (memo) => {
-
-  const { droppableNode } = memo
-
-  if (droppableNode) {
-
-    return Object.assign({}, memo, { prevDroppableNode: droppableNode })
-
-  }
-
-  return memo
-
-}
-
-module.exports = createPrevDroppableNode
-
-
-/***/ }),
-/* 69 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const B = __webpack_require__(0)
-const { DRAG_MOVE } = __webpack_require__(2)
-const getShift = __webpack_require__(17)
-const getAlign = __webpack_require__(70)
-
-const createDroppableAlign = (memo) => {
-
-  const { dragType, droppableNode, config, universalEvent } = memo
-
-  if (dragType == DRAG_MOVE && droppableNode) {
-
-    const droppableShift = getShift(droppableNode, universalEvent)
-
-    const droppableBoundings = droppableNode.getBoundingClientRect()
-
-    const droppableAlign = getAlign(
-      config.align,
-      droppableShift.x,
-      droppableShift.y,
-      droppableBoundings.width,
-      droppableBoundings.height
-    )
-
-    return Object.assign({}, memo, { droppableAlign })
-
-  }
-
-  return memo
-
-}
-
-module.exports = createDroppableAlign
-
-
-/***/ }),
-/* 70 */
-/***/ (function(module, exports) {
-
-const getAlign = (type, shiftX, shiftY, width, height) => {
-
-  if (type == 'vertical') {
-
-    return (shiftY < height / 2) ? 'before' : 'after'
-
-  } else {
-
-    return (shiftX < width / 2) ? 'before' : 'after'
-
-  }
-
-}
-
-module.exports = getAlign
-
-
-/***/ }),
-/* 71 */
-/***/ (function(module, exports) {
-
-const createPrevDroppableAlign = (memo) => {
-
-  const { droppableAlign } = memo
-
-  if (droppableAlign) {
-
-    return Object.assign({}, memo, { prevDroppableAlign: droppableAlign })
-
-  }
-
-  return memo
-
-}
-
-module.exports = createPrevDroppableAlign
-
-
-/***/ }),
-/* 72 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const { DRAG_MOVE } = __webpack_require__(2)
-
-const isDroppableNew = (memo) => {
-
-  const {
-    dragType,
-    droppableNode,
-    prevDroppableNode,
-    droppableAlign,
-    prevDroppableAlign,
-    draggableNode,
-  } = memo
-
-
-  const droppableisDraggableNode = (
-    droppableNode &&
-    droppableNode.isSameNode(draggableNode)
-  )
-
-  if (!droppableNode || droppableisDraggableNode || dragType != DRAG_MOVE) {
-
-    return false
-
-  }
-
-  return (
-    !prevDroppableNode ||
-    !droppableNode.isSameNode(prevDroppableNode) ||
-    droppableNode.isSameNode(prevDroppableNode) &&
-    droppableAlign != prevDroppableAlign
-  )
-
-}
-
-const createIsDroppableNew = (memo) => {
-
-  return Object.assign({}, memo, { isDroppableNew: isDroppableNew(memo) })
-
-}
-
-module.exports = createIsDroppableNew
-
-
-/***/ }),
-/* 73 */
-/***/ (function(module, exports) {
-
-const createDroppablePosition = (memo) => {
-
-  const {
-    config,
-    dragType,
-    droppableNode,
-    droppableAlign,
-    draggableNode,
-    isDroppableNew,
-    draggablePosition,
-  } = memo
-
-  if (!isDroppableNew) return memo
-
-  const sortableDomNodes = Array.from(config.rootNode.childNodes)
-
-  const droppableIndex = sortableDomNodes
-    .findIndex(domNode => domNode.isSameNode(droppableNode))
-
-  const droppablePosition = droppableAlign == 'before'
-    ? (
-        droppableIndex < draggablePosition
-          ? droppableIndex
-          : droppableIndex - 1
-      )
-    : (
-        droppableIndex < draggablePosition
-          ? droppableIndex + 1
-          : droppableIndex
-      )
-
-  return Object.assign({}, memo, { droppablePosition })
-
-}
-
-module.exports = createDroppablePosition
-
-
-/***/ }),
-/* 74 */
-/***/ (function(module, exports) {
-
-const createDraggablePosition = (memo) => {
-
-  const { config, draggableNode, isDroppableNew } = memo
-
-  if (!isDroppableNew) return memo
-
-  const sortableDomNodes = Array.from(config.rootNode.childNodes)
-
-  const draggablePosition = sortableDomNodes
-    .findIndex(domNode => domNode.isSameNode(draggableNode))
-
-  return Object.assign({}, memo, { draggablePosition })
-
-}
-
-module.exports = createDraggablePosition
-
-
-/***/ }),
-/* 75 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const { DRAG_START, DRAG_STOP, DRAG_MOVE } = __webpack_require__(2)
-const move = __webpack_require__(76)
-
-const moveGhostNode = (memo) => {
-
-  const {
-    config,
-    dragType,
-    ghostNode,
-    draggableNode,
-    draggableCoords,
-    ghostRootNode,
-  } = memo
-
-  switch (dragType) {
-
-    case DRAG_START: {
-
-      draggableNode.classList.add(config.draggableClassName)
-
-      if (config.cloneRootNode) {
-
-        config.ghostWrapperNode.appendChild(ghostRootNode)
-
-        ghostRootNode.appendChild(ghostNode)
-
-      } else {
-
-        config.ghostWrapperNode.appendChild(ghostNode)
-
-      }
-
-      move(ghostNode, draggableCoords.x, draggableCoords.y)
-
-      break
-    }
-
-    case DRAG_MOVE: {
-
-      move(ghostNode, draggableCoords.x, draggableCoords.y)
-
-      break
-    }
-
-    case DRAG_STOP: {
-
-      draggableNode.classList.remove(config.draggableClassName)
-
-      const removeNode = config.cloneRootNode ? ghostRootNode : ghostNode
-
-      removeNode.parentNode.removeChild(removeNode)
-
-      break
-    }
-
-  }
-
-}
-
-module.exports = moveGhostNode
-
-
-/***/ }),
-/* 76 */
-/***/ (function(module, exports) {
-
-const move = (domNode, left, top) => {
-
-  domNode.style.left = left + 'px'
-  domNode.style.top = top + 'px'
-
-}
-
-module.exports = move
-
-
-/***/ }),
-/* 77 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = {
-  Component: __webpack_require__(78),
-  html: __webpack_require__(105),
-  render: __webpack_require__(107),
-}
-
-
-/***/ }),
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const B = __webpack_require__(0)
-const humanizeNodes = __webpack_require__(18)
-const countDomNodes = __webpack_require__(11)
-const createLiveTree = __webpack_require__(19)
-const filterDomNodes = __webpack_require__(23)
-const getParentNodes = __webpack_require__(91)
-const filterNodesOffsets = __webpack_require__(92)
-const createPatchTree = __webpack_require__(24)
-const findDomNode = __webpack_require__(99)
-const updateDomTree = __webpack_require__(25)
-const eachNodes = __webpack_require__(13)
+const humanizeNodes = __webpack_require__(22)
+const countDomNodes = __webpack_require__(14)
+const createLiveTree = __webpack_require__(23)
+const filterDomNodes = __webpack_require__(27)
+const getParentNodes = __webpack_require__(65)
+const filterNodesOffsets = __webpack_require__(66)
+const createPatchTree = __webpack_require__(28)
+const findDomNode = __webpack_require__(73)
+const updateDomTree = __webpack_require__(29)
+const eachNodes = __webpack_require__(16)
 const { INSTANCE_TYPE, CLASS_TYPE } = __webpack_require__(1)
-const hookNode = __webpack_require__(4)
-const { AFTER_DOM_CREATE } = __webpack_require__(5)
-const mapNodes = __webpack_require__(14)
-const createNodesWithRefs = __webpack_require__(6)
+const hookNode = __webpack_require__(6)
+const { AFTER_DOM_CREATE } = __webpack_require__(7)
+const mapNodes = __webpack_require__(17)
+const createNodesWithRefs = __webpack_require__(8)
 
 class Base {
 
@@ -3167,10 +1746,467 @@ module.exports = Base
 
 
 /***/ }),
-/* 79 */
+/* 35 */
+/***/ (function(module, exports) {
+
+module.exports = (items, mapper, callback) => {
+
+  if (items.length == 0) return callback(null, [])
+
+  let counter = 0
+
+  let results = []
+
+  items.forEach((item, index) => {
+
+    new Promise((resolve, reject) => {
+
+      mapper(item, index, (error, result) => {
+
+        if (error) {
+
+          reject(error)
+
+        } else {
+
+          resolve(result)
+
+        }
+
+      })
+
+    }).then((result) => {
+
+      results[index] = result
+
+      if (items.length == ++counter)
+        callback(null, results)
+
+    }).catch((error) => {
+
+      callback(error, null)
+
+    })
+
+  })
+
+}
+
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const countDomNodes = __webpack_require__(11)
+const kindOf = __webpack_require__(12)
+const include = __webpack_require__(13)
+
+const clone = (argument) => {
+
+  const argumentType = kindOf(argument)
+
+
+  if (argumentType == 'object') {
+
+    const object = argument
+
+    const newObject = {}
+
+    for (const key in object) {
+
+      const value = object[key]
+
+      const valueType = kindOf(value)
+
+      if (include(['array','object'], valueType)) {
+
+        newObject[key] = clone(value)
+
+      } else {
+
+        newObject[key] = value
+
+      }
+
+    }
+
+    return newObject
+
+  } else
+
+
+  if (argumentType == 'array') {
+
+    const array = argument
+
+    const newArray = []
+
+    for (const value of array) {
+
+      const valueType = kindOf(value)
+
+      if (include(['array','object'], valueType)) {
+
+        newArray.push(clone(value))
+
+      } else {
+
+        newArray.push(value)
+
+      }
+
+    }
+
+    return newArray
+
+
+  } else {
+
+    throw new Error('Cloned argument should be type of Array or Object.')
+
+  }
+
+}
+
+module.exports = clone
+
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports) {
+
+const pick = (object, ...keys) => {
+  const newObject = {}
+  keys.forEach((key) => {
+    if (key in object)
+      newObject[key] = object[key]
+  })
+  return newObject
+}
+
+module.exports = pick
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
+
+const omit = (object, ...keys) => {
+  const newObject = {}
+  Object.keys(object).forEach((key) => {
+    if (keys.indexOf(key) == -1)
+      newObject[key] = object[key]
+  })
+  return newObject
+
+}
+
+module.exports = omit
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports) {
+
+const union = (first, second) => {
+  return first.concat(
+    second.filter((key) => first.indexOf(key) == -1)
+  )
+}
+
+module.exports = union
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports) {
+
+module.exports = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports) {
+
+module.exports = (string) => {
+
+  return string.charAt(0).toLowerCase() + string.slice(1)
+
+}
+
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const flatten = __webpack_require__(21)
+const kindOf = __webpack_require__(12)
+const include = __webpack_require__(13)
+
+module.exports = (...args) => {
+
+  const unpackObjects = (args) => {
+
+    return args.map((arg) => {
+
+      const argType = kindOf(arg)
+
+      if (argType == 'array') {
+
+        return unpackObjects(arg)
+
+      } else
+
+      if (argType == 'object') {
+
+        return Object.keys(arg).map((key) => {
+
+          return arg[key] ? key : false
+
+        })
+
+      } else {
+
+        return arg
+
+      }
+
+    })
+
+  }
+
+  return (
+    flatten( unpackObjects(args) )
+      .filter((arg) => {
+        return include(['number', 'string'], typeof arg)
+      })
+      .join(' ')
+  )
+
+}
+
+
+// const flattenNames = flatten(args)
+//
+// const objectNames = flattenNames.map((arg) => {
+//
+//   if(kindOf(arg) == 'object') {
+//
+//     Object.keys(arg).map((key) => {
+//
+//       if (arg[key]) {
+//
+//         return key
+//
+//       }
+//
+//       return false
+//
+//     })
+//
+//   }
+//
+//   return arg
+//
+// })
+//
+// const cleanedClassNames =
+//
+// return classNames..join(' ')
+
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
+module.exports = (array) => {
+
+  return array[0]
+
+}
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports) {
+
+module.exports = (array) => {
+
+  return array[array.length - 1]
+
+}
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+module.exports = (left, right) => {
+
+  if (!Array.isArray(left) || !Array.isArray(right)) return null
+
+  return left.reduce((values, value) => {
+
+    return right.indexOf(value) > -1
+      ? [ ...values, value ]
+      : values
+
+  }, [])
+
+}
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+module.exports = (count) => {
+
+  return [...Array(count).keys()]
+
+}
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports) {
+
+module.exports = (items, match) => {
+
+  const loop = (items, index) => {
+
+    if (index == -1) return -1
+
+    return match(items[index])
+      ? index
+      : loop(items, index - 1)
+  }
+
+  return loop(items, items.length - 1)
+
+}
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports) {
+
+module.exports = (...methods) => {
+
+  return (result) => {
+
+    return methods.reduceRight((result, method) => {
+
+      return method(result)
+
+    }, result)
+
+  }
+
+}
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports) {
+
+const OPEN_QUOTE_SPECIAL = '&lt;'
+const CLOSE_QUOTE_SPECIAL = '&gt;'
+
+const OPEN_QUOTE_SIMPLE = '<'
+const CLOSE_QUOTE_SIMPLE = '>'
+
+const SPECIAL_TO_SIMPLE = {
+  [OPEN_QUOTE_SPECIAL]:  OPEN_QUOTE_SIMPLE,
+  [CLOSE_QUOTE_SPECIAL]: CLOSE_QUOTE_SIMPLE
+}
+
+const SIMPLE_TO_SPECIAL = {
+  [OPEN_QUOTE_SIMPLE]:  OPEN_QUOTE_SPECIAL,
+  [CLOSE_QUOTE_SIMPLE]: CLOSE_QUOTE_SPECIAL
+}
+
+const SIMPLE_QUOTES =
+  new RegExp(OPEN_QUOTE_SIMPLE + '|' + CLOSE_QUOTE_SIMPLE, 'g')
+
+const SPECIAL_QUOTES =
+  new RegExp(OPEN_QUOTE_SPECIAL + '|' + CLOSE_QUOTE_SPECIAL, 'g')
+
+const encode = (string) => (
+  string.replace(SIMPLE_QUOTES, match => SIMPLE_TO_SPECIAL[match])
+)
+
+const decode = (string) => (
+  string.replace(SPECIAL_QUOTES, match => SPECIAL_TO_SIMPLE[match])
+)
+
+module.exports = { encode, decode }
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports) {
+
+module.exports = (items, index) => {
+
+  if (index >= 0) {
+
+    return items[index]
+
+  } else {
+
+    return items[items.length + index]
+
+  }
+
+}
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports) {
+
+const move = (items, from, to) => {
+
+  const itemsWithoutFrom = [
+    ...items.slice(0, from),
+    ...items.slice(from + 1),
+  ]
+
+  return [
+    ...itemsWithoutFrom.slice(0, to),
+    items[from],
+    ...itemsWithoutFrom.slice(to),
+  ]
+
+}
+
+module.exports = move
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports) {
+
+const insert = (items, index, ...newItems) => {
+
+  return [
+    ...items.slice(0, index),
+    ...newItems,
+    ...items.slice(index)
+  ]
+
+}
+
+module.exports = insert
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const countDomNodes = __webpack_require__(14)
 
 const createNodes = ({
   liveNodes = [],
@@ -3273,24 +2309,24 @@ module.exports = createNodes
 
 
 /***/ }),
-/* 80 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
-const createNode = __webpack_require__(81)
-const hookNode = __webpack_require__(4)
-const getCreateAction = __webpack_require__(89)
-const handleError = __webpack_require__(20)
-const mapNodes = __webpack_require__(14)
+const createNode = __webpack_require__(55)
+const hookNode = __webpack_require__(6)
+const getCreateAction = __webpack_require__(63)
+const handleError = __webpack_require__(24)
+const mapNodes = __webpack_require__(17)
 
 const {
   BEFORE_EACH_ITERATION, BEFORE_INSTANCE_UPDATE, ON_INSTANCE_CREATE
-} = __webpack_require__(5)
+} = __webpack_require__(7)
 
 const {
   CREATE_ROOT, CREATE_TEXT, CREATE_TAG,
   CREATE_INSTANCE, UPDATE_INSTANCE, RESUME_INSTANCE
-} = __webpack_require__(15)
+} = __webpack_require__(18)
 
 const { CLASS_TYPE } = __webpack_require__(1)
 
@@ -3515,21 +2551,21 @@ module.exports = ({
 
 
 /***/ }),
-/* 81 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const createRootNode = __webpack_require__(82)
-const createInstanceNode = __webpack_require__(83)
-const updateInstanceNode = __webpack_require__(86)
-const createTagNode = __webpack_require__(87)
-const createTextNode = __webpack_require__(88)
-const handleError = __webpack_require__(20)
-const { addRef } = __webpack_require__(12)
+const createRootNode = __webpack_require__(56)
+const createInstanceNode = __webpack_require__(57)
+const updateInstanceNode = __webpack_require__(60)
+const createTagNode = __webpack_require__(61)
+const createTextNode = __webpack_require__(62)
+const handleError = __webpack_require__(24)
+const { addRef } = __webpack_require__(15)
 
 const {
   CREATE_ROOT, CREATE_TEXT, CREATE_TAG,
   CREATE_INSTANCE, UPDATE_INSTANCE, RESUME_INSTANCE
-} = __webpack_require__(15)
+} = __webpack_require__(18)
 
 module.exports = ({
   type = null,
@@ -3625,7 +2661,7 @@ module.exports = ({
 
 
 /***/ }),
-/* 82 */
+/* 56 */
 /***/ (function(module, exports) {
 
 module.exports = ({ templateNode }) => {
@@ -3640,13 +2676,13 @@ module.exports = ({ templateNode }) => {
 
 
 /***/ }),
-/* 83 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
-const hookNode = __webpack_require__(4)
+const hookNode = __webpack_require__(6)
 const { INSTANCE_TYPE } = __webpack_require__(1)
-const createNodesWithRefs = __webpack_require__(6)
+const createNodesWithRefs = __webpack_require__(8)
 
 module.exports = ({
   templateNode,
@@ -3697,7 +2733,7 @@ module.exports = ({
 
 
 /***/ }),
-/* 84 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {
@@ -3783,7 +2819,7 @@ module.exports = (liveNode, templateNode) => {
 
 
 /***/ }),
-/* 85 */
+/* 59 */
 /***/ (function(module, exports) {
 
 // Before render dom
@@ -3851,11 +2887,11 @@ module.exports = {
 
 
 /***/ }),
-/* 86 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
-const createNodesWithRefs = __webpack_require__(6)
+const createNodesWithRefs = __webpack_require__(8)
 
 module.exports = ({
   liveNode,
@@ -3912,7 +2948,7 @@ module.exports = ({
 
 
 /***/ }),
-/* 87 */
+/* 61 */
 /***/ (function(module, exports) {
 
 module.exports = ({ templateNode }) => {
@@ -3951,7 +2987,7 @@ module.exports = ({ templateNode }) => {
 
 
 /***/ }),
-/* 88 */
+/* 62 */
 /***/ (function(module, exports) {
 
 module.exports = ({ templateNode }) => {
@@ -3965,7 +3001,7 @@ module.exports = ({ templateNode }) => {
 
 
 /***/ }),
-/* 89 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {
@@ -3975,7 +3011,7 @@ const {
 const {
   CREATE_ROOT, CREATE_TAG, CREATE_TEXT,
   CREATE_INSTANCE, UPDATE_INSTANCE, RESUME_INSTANCE
-} = __webpack_require__(15)
+} = __webpack_require__(18)
 
 module.exports = (liveNode, templateNode, context) => {
 
@@ -4040,7 +3076,7 @@ module.exports = (liveNode, templateNode, context) => {
 
 
 /***/ }),
-/* 90 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { TEXT_TYPE } = __webpack_require__(1)
@@ -4073,10 +3109,10 @@ module.exports = (childs) => {
 
 
 /***/ }),
-/* 91 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const countDomNodes = __webpack_require__(11)
+const countDomNodes = __webpack_require__(14)
 const { INSTANCE_TYPE } = __webpack_require__(1)
 
 const loop = (node, nodes = [], offset = 0) => {
@@ -4130,7 +3166,7 @@ module.exports = loop
 
 
 /***/ }),
-/* 92 */
+/* 66 */
 /***/ (function(module, exports) {
 
 module.exports = (nodes) => {
@@ -4143,7 +3179,7 @@ module.exports = (nodes) => {
 
 
 /***/ }),
-/* 93 */
+/* 67 */
 /***/ (function(module, exports) {
 
 module.exports = (liveNodes, { templateNodes, offset = 0 }) => {
@@ -4207,7 +3243,7 @@ module.exports = (liveNodes, { templateNodes, offset = 0 }) => {
 
 
 /***/ }),
-/* 94 */
+/* 68 */
 /***/ (function(module, exports) {
 
 module.exports = (liveNodes, { templateNodes }) => {
@@ -4290,7 +3326,7 @@ module.exports = (liveNodes, { templateNodes }) => {
 
 
 /***/ }),
-/* 95 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
@@ -4374,13 +3410,13 @@ module.exports = createNodes
 
 
 /***/ }),
-/* 96 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
-const countActionsScore = __webpack_require__(97)
-const getNodeActions = __webpack_require__(98)
-const { DELETE_NODE, REPLACE_NODE } = __webpack_require__(7)
+const countActionsScore = __webpack_require__(71)
+const getNodeActions = __webpack_require__(72)
+const { DELETE_NODE, REPLACE_NODE } = __webpack_require__(9)
 
 module.exports = ({ liveNode, templateNode, limit }) => {
 
@@ -4412,10 +3448,10 @@ module.exports = ({ liveNode, templateNode, limit }) => {
 
 
 /***/ }),
-/* 97 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { CREATE_NODE, DELETE_NODE } = __webpack_require__(7)
+const { CREATE_NODE, DELETE_NODE } = __webpack_require__(9)
 
 module.exports = (actions) => {
 
@@ -4449,12 +3485,12 @@ module.exports = (actions) => {
 
 
 /***/ }),
-/* 98 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const {
   INSERT_NODE, CREATE_NODE, UPDATE_NODE, REPLACE_NODE, DELETE_NODE
-} = __webpack_require__(7)
+} = __webpack_require__(9)
 
 const { TAG_TYPE, TEXT_TYPE } = __webpack_require__(1)
 
@@ -4537,7 +3573,7 @@ module.exports = ({ liveNode, templateNode }) => {
 
 
 /***/ }),
-/* 99 */
+/* 73 */
 /***/ (function(module, exports) {
 
 const loop = (node, offsets, index = 0) => {
@@ -4562,16 +3598,16 @@ module.exports = loop
 
 
 /***/ }),
-/* 100 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { addRef, removeRef } = __webpack_require__(12)
-const { createElement, insertAt, updateProps } = __webpack_require__(101)
-const sortProps = __webpack_require__(26)
-const isPropsEqual = __webpack_require__(103)
+const { addRef, removeRef } = __webpack_require__(15)
+const { createElement, insertAt, updateProps } = __webpack_require__(75)
+const sortProps = __webpack_require__(30)
+const isPropsEqual = __webpack_require__(77)
 const {
   CREATE_NODE, UPDATE_NODE, DELETE_NODE, REPLACE_NODE, INSERT_NODE
-} = __webpack_require__(7)
+} = __webpack_require__(9)
 const { TEXT_TYPE } = __webpack_require__(1)
 
 module.exports = ({
@@ -4699,13 +3735,13 @@ module.exports = ({
 
 
 /***/ }),
-/* 101 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { TEXT_TYPE, TAG_TYPE } = __webpack_require__(1)
-const sortProps = __webpack_require__(26)
-const events = __webpack_require__(27)
-const diffProps = __webpack_require__(102)
+const sortProps = __webpack_require__(30)
+const events = __webpack_require__(31)
+const diffProps = __webpack_require__(76)
 
 const updateProps = (domNode, liveProps, templateProps, isPropsEqual) => {
 
@@ -4858,7 +3894,7 @@ module.exports = {
 
 
 /***/ }),
-/* 102 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
@@ -4958,7 +3994,7 @@ module.exports = (leftProps = {}, rightProps = {}, isPropsEqual) => {
 
 
 /***/ }),
-/* 103 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
@@ -5005,7 +4041,7 @@ module.exports = (leftProp, rightProp) => {
 
 
 /***/ }),
-/* 104 */
+/* 78 */
 /***/ (function(module, exports) {
 
 const updateNodes = ({ patchNodes, parentDomNode, updateDomNode }) => {
@@ -5036,11 +4072,11 @@ module.exports = updateNodes
 
 
 /***/ }),
-/* 105 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { TAG_TYPE, TEXT_TYPE } = __webpack_require__(1)
-const tags = __webpack_require__(106)
+const tags = __webpack_require__(80)
 const B = __webpack_require__(0)
 
 const h = (tag, props = {}, childs) => {
@@ -5081,7 +4117,7 @@ tags.forEach((tag) => {
 
 
 /***/ }),
-/* 106 */
+/* 80 */
 /***/ (function(module, exports) {
 
 module.exports = [
@@ -5205,20 +4241,20 @@ module.exports = [
 
 
 /***/ }),
-/* 107 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
 const { ROOT_TYPE, INSTANCE_TYPE } = __webpack_require__(1)
-const createLiveTree = __webpack_require__(19)
-const filterDomNodes = __webpack_require__(23)
-const eachNodes = __webpack_require__(13)
-const hookNode = __webpack_require__(4)
-const { AFTER_DOM_CREATE } = __webpack_require__(5)
-const createPatchTree = __webpack_require__(24)
-const updateDomTree = __webpack_require__(25)
-const dom2vqua = __webpack_require__(108)
-const humanizeNodes = __webpack_require__(18)
+const createLiveTree = __webpack_require__(23)
+const filterDomNodes = __webpack_require__(27)
+const eachNodes = __webpack_require__(16)
+const hookNode = __webpack_require__(6)
+const { AFTER_DOM_CREATE } = __webpack_require__(7)
+const createPatchTree = __webpack_require__(28)
+const updateDomTree = __webpack_require__(29)
+const dom2vqua = __webpack_require__(82)
+const humanizeNodes = __webpack_require__(22)
 
 module.exports = (parentDomNode, liveNodes, templateNodes, context = {}) => {
 
@@ -5272,12 +4308,12 @@ module.exports = (parentDomNode, liveNodes, templateNodes, context = {}) => {
 
 
 /***/ }),
-/* 108 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const convertTag = __webpack_require__(109)
-const convertText = __webpack_require__(110)
-const mapNodes = __webpack_require__(111)
+const convertTag = __webpack_require__(83)
+const convertText = __webpack_require__(84)
+const mapNodes = __webpack_require__(85)
 
 module.exports = (nodes) => {
 
@@ -5308,7 +4344,7 @@ module.exports = (nodes) => {
 
 
 /***/ }),
-/* 109 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { TAG_TYPE } = __webpack_require__(1)
@@ -5343,7 +4379,7 @@ module.exports = (node) => {
 
 
 /***/ }),
-/* 110 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const { TEXT_TYPE } = __webpack_require__(1)
@@ -5360,7 +4396,7 @@ module.exports = (node) => {
 
 
 /***/ }),
-/* 111 */
+/* 85 */
 /***/ (function(module, exports) {
 
 const loop = (node, createNode) => {
@@ -5404,35 +4440,110 @@ module.exports = loop
 
 
 /***/ }),
-/* 112 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { html, Component } = __webpack_require__(77)
-const List = __webpack_require__(114)
+const { html, Component } = __webpack_require__(3)
+const B = __webpack_require__(0)
+const List = __webpack_require__(10)
+const Preview = __webpack_require__(11)
+const Menu = __webpack_require__(87)
+const PageVertical = __webpack_require__(88)
+const PageHorizontal = __webpack_require__(130)
+const PageScroll = __webpack_require__(131)
+const PageMultiple = __webpack_require__(132)
 
-const createPreview = ({ name }, ...childs) => {
+const setActivePageById = (id, pages) => {
 
-const { div, p, h2 } = html
+  return pages.map(page => {
 
-  return (
-    div({ class: 'preview' },
-      h2({}, name),
-      childs
-    )
-  )
+    const active = page.id == id
+
+    return Object.assign({}, page, { active })
+
+  })
 
 }
 
 class App extends Component {
 
+  constructor(props, state) {
+
+    super(props, state)
+
+    const pages = [
+      {
+        id: 'vertical',
+        name: 'Vertical',
+        active: true,
+        component: PageVertical,
+      },
+      {
+        id: 'horizontal',
+        name: 'Horizontal',
+        active: false,
+        component: PageHorizontal,
+      },
+      {
+        id: 'scroll',
+        name: 'Scroll',
+        active: false,
+        component: PageScroll,
+      },
+      {
+        id: 'multiple',
+        name: 'Multiple',
+        active: false,
+        component: PageMultiple,
+      },
+    ]
+
+    const pageId = window.location.hash.slice(1) || 'vertical'
+
+    this.state = {
+      pages: setActivePageById(pageId, pages)
+    }
+
+    this.handleMenuItemClick = this.handleMenuItemClick.bind(this)
+
+  }
+
+  handleMenuItemClick({ event, item }) {
+
+    this.setState({
+      pages: this.state.pages.map(page => {
+
+        return Object.assign({}, page, { active: page.id == item.id })
+
+      })
+    })
+
+  }
+
   render() {
 
+    const page = (
+      this.state.pages.find(page => page.active) ||
+      this.state.pages[0]
+    )
+
+    const { h1, div, br } = html
+
     return [
-      createPreview({ name: 'Verical' },
-        List.v({ align: 'vertical' })
+      div({ class: 'sidebar' },
+        Menu.v({
+          items: this.state.pages,
+          onClick: this.handleMenuItemClick,
+        })
       ),
-      createPreview({ name: 'Horizontal' },
-        List.v({ align: 'horizontal' })
+      div({ class: B.classNames('content', {
+        ['content__' + page.id]: page.active
+      }) },
+        h1({},
+          page.name
+        ),
+        br(),
+        page.component.v({ key: page.id })
       )
     ]
 
@@ -5444,57 +4555,82 @@ module.exports = App
 
 
 /***/ }),
-/* 113 */
-/***/ (function(module, exports) {
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
 
-const createIsNewPosition = (memo) => {
+const { Component, html } = __webpack_require__(3)
+const B = __webpack_require__(0)
 
-  const { isDroppableNew, draggablePosition, droppablePosition } = memo
+class Menu extends Component {
 
-  const isNewPosition = (
-    isDroppableNew &&
-    draggablePosition != droppablePosition
-  )
+  constructor(props, context) {
 
-  return Object.assign({}, memo, { isNewPosition })
+    super(props, context)
+
+    this.handleClick = this.handleClick.bind(this)
+
+  }
+
+  handleClick(event) {
+
+    if (this.props.onClick)
+      this.props.onClick(event)
+
+  }
+
+  render() {
+
+    const { ul, li, a } = html
+
+    return (
+      ul({ class: 'menu' },
+        this.props.items.map(item => {
+          return (
+            li({
+              key: item.id,
+              class: B.classNames('menu__item', {
+                'menu__item--active': item.active
+              })
+            },
+              a({
+                class: 'menu__link',
+                href: '#' + item.id,
+                onClick: () => this.handleClick({ event, item })
+              },
+                item.name
+              )
+            )
+          )
+        })
+      )
+    )
+
+  }
 
 }
 
-module.exports = createIsNewPosition
+module.exports = Menu
 
 
 /***/ }),
-/* 114 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
-const { Component, html } = __webpack_require__(77)
-const createSortable = __webpack_require__(29)
+const { Component, html } = __webpack_require__(3)
+const Preview = __webpack_require__(11)
+const List = __webpack_require__(10)
+const User = __webpack_require__(19)
+const createSortable = __webpack_require__(20)
 
-class List extends Component {
-
-  static defaultProps() {
-
-    return {
-      align: 'vertical'
-    }
-
-  }
+class PageVertical extends Component {
 
   constructor(props) {
 
     super(props)
 
     this.state = {
-      items: [
-        { id: 0, name: 'Zero'  },
-        { id: 1, name: 'One'   },
-        { id: 2, name: 'Two'   },
-        { id: 3, name: 'Three' },
-        { id: 4, name: 'Four'  },
-        { id: 5, name: 'Five'  },
-        { id: 6, name: 'Six '  }
-      ]
+      users: User.getAll().slice(0, 10)
     }
 
   }
@@ -5502,9 +4638,10 @@ class List extends Component {
   afterMount() {
 
     this.sortable = createSortable({
-      rootNode: this.refs.list,
-      align: this.props.align,
-      isHandlerNode: domNode => domNode.textContent == '#'
+      rootNode: this.refs.List.refs.list,
+      align: 'vertical',
+      isHandlerNode: domNode => domNode.textContent == '#',
+      scrollNode: document.querySelector('.sort__wrapper'),
     })
 
     this.sortable.subscribe((memo) => {
@@ -5514,12 +4651,12 @@ class List extends Component {
       if (isNewPosition) {
 
         const newItems = B.move(
-          this.state.items,
+          this.state.users,
           draggablePosition,
           droppablePosition
         )
 
-        this.setState({ items: newItems })
+        this.setState({ users: newItems })
 
       }
 
@@ -5535,48 +4672,1527 @@ class List extends Component {
 
   render() {
 
-    const { ul, li, span } = html
-
     return (
-      ul({ class: 'noselect ' + this.props.align + '-list', ref: 'list' },
-        this.state.items.map((item) => {
-          return (
-            li({ key: item.id.toString() },
-              span({ class: 'cursor-move' }, '#'),
-              ' ',
-              item.name,
-            )
-          )
-        })
-      )
+      List.v({
+        items: this.state.users,
+        ref: 'List',
+        align: 'vertical',
+      })
     )
 
   }
 
 }
 
-module.exports = List
+module.exports = PageVertical
 
 
 /***/ }),
-/* 115 */
+/* 89 */
+/***/ (function(module, exports) {
+
+const rules = [
+  {
+    check: config => !(config.rootNode instanceof HTMLElement),
+    message: 'config.rootNode is not a HTMLElement'
+  }
+]
+
+const findConfigErrors = config => {
+
+  return rules.reduce((messages, rule) => {
+
+    if (rule.check(config)) return [ ...messages, rule.message ]
+
+    return messages
+
+  }, [])
+
+}
+
+module.exports = findConfigErrors
+
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports) {
+
+class Stream {
+
+  constructor(...sources) {
+
+    const grouppedSources = sources.reduce((memo, source) => {
+
+      const key = this.isDynamicSource(source)
+        ? 'dynamicSources'
+        : 'staticSources'
+
+      return Object.assign({}, memo, { [key]: [ ...memo[key], source ] })
+
+    }, { staticSources: [], dynamicSources: [] })
+
+    this.staticSources = grouppedSources.staticSources
+    this.dynamicSources = grouppedSources.dynamicSources
+
+    this.modifiers = []
+    this.value = null
+
+  }
+
+  subscribe(onChange) {
+
+    this.onChange = onChange
+
+    this.staticSources.forEach(source => {
+
+      source.listen()
+      source.addSubscriber(this)
+
+    })
+
+  }
+
+  isDynamicSource(source) {
+
+    return 'addWhen' in source || 'removeWhen' in source
+
+  }
+
+  unsubscribe() {
+
+    const sources = [ ...this.staticSources, ...this.dynamicSources ]
+
+    sources.forEach(source => source.mute())
+
+  }
+
+  notify(value) {
+
+    const newValue = this.modifiers.reduce((value, modifier) => {
+
+      if (modifier.type == 'reduce') {
+
+        return modifier.modify(this.value, value)
+
+      }
+
+      return value
+
+    }, value)
+
+    this.value = newValue
+
+    this.onChange(newValue)
+
+    this.manageDynamicSources(newValue)
+
+  }
+
+  manageDynamicSources(value) {
+
+    this.dynamicSources.forEach(dynamicSource => {
+
+      if (!dynamicSource.active && dynamicSource.addWhen(value)) {
+
+        dynamicSource.listen()
+        dynamicSource.addSubscriber(this)
+
+      }
+
+      if (dynamicSource.active && dynamicSource.removeWhen(value)) {
+
+        dynamicSource.mute()
+        dynamicSource.removeSubscriber(this)
+
+      }
+
+    })
+
+  }
+
+  reduce(callback, initialValue) {
+
+    this.value = initialValue
+
+    this.modifiers = [
+      ...this.modifiers,
+      { type: 'reduce', modify: callback }
+    ]
+
+    return this
+
+  }
+
+}
+
+module.exports = Stream
+
+
+/***/ }),
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { DRAG_START } = __webpack_require__(2)
+const { DRAG_START, DRAG_STOP, DRAG_MOVE } = __webpack_require__(2)
+const move = __webpack_require__(92)
 
-const createGhostRootNode = (memo) => {
+const moveGhostNode = (memo) => {
 
-  const { config } = memo
+  const {
+    config,
+    dragType,
+    ghostNode,
+    draggableNode,
+    ghostCoords,
+    ghostRootNode,
+  } = memo
 
-  if (!config.cloneRootNode) return memo
-
-  switch (memo.dragType) {
+  switch (dragType) {
 
     case DRAG_START: {
 
-      const ghostRootNode = config.rootNode.cloneNode()
+      draggableNode.classList.add(config.draggableClassName)
 
-      return Object.assign({}, memo, { ghostRootNode })
+      if (config.cloneRootNode) {
+
+        config.ghostWrapperNode.appendChild(ghostRootNode)
+
+        ghostRootNode.appendChild(ghostNode)
+
+      } else {
+
+        config.ghostWrapperNode.appendChild(ghostNode)
+
+      }
+
+      move(ghostNode, ghostCoords.x, ghostCoords.y)
+
+      break
+    }
+
+    case DRAG_MOVE: {
+
+      move(ghostNode, ghostCoords.x, ghostCoords.y)
+
+      break
+    }
+
+    case DRAG_STOP: {
+
+      draggableNode.classList.remove(config.draggableClassName)
+
+      const removeNode = config.cloneRootNode ? ghostRootNode : ghostNode
+
+      removeNode.parentNode.removeChild(removeNode)
+
+      break
+    }
+
+  }
+
+}
+
+module.exports = moveGhostNode
+
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports) {
+
+const move = (domNode, left, top) => {
+
+  domNode.style.left = left + 'px'
+  domNode.style.top = top + 'px'
+
+}
+
+module.exports = move
+
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const EventSource = __webpack_require__(4)
+
+class MousedownSource extends EventSource {
+
+  constructor(domNode, eventType = 'mousedown') {
+
+    super(domNode, eventType)
+
+  }
+
+}
+
+module.exports = MousedownSource
+
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const EventSource = __webpack_require__(4)
+
+class MousemoveSource extends EventSource {
+
+  constructor(domNode, eventType = 'mousemove') {
+
+    super(domNode, eventType)
+
+  }
+
+  addWhen(memo) {
+
+    return memo.event.type == 'mousedown'
+
+  }
+
+  removeWhen(memo) {
+
+    return memo.event.type == 'mouseup'
+
+  }
+
+}
+
+module.exports = MousemoveSource
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const EventSource = __webpack_require__(4)
+
+class MouseupSource extends EventSource {
+
+  constructor(domNode, eventType = 'mouseup') {
+
+    super(domNode, eventType)
+
+  }
+
+  addWhen(memo) {
+
+    return memo.event.type == 'mousedown'
+
+  }
+
+  removeWhen(memo) {
+
+    return memo.event.type == 'mouseup'
+
+  }
+
+}
+
+module.exports = MouseupSource
+
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const EventSource = __webpack_require__(4)
+
+class TouchstartSource extends EventSource {
+
+  constructor(domNode, eventType = 'touchstart') {
+
+    super(domNode, eventType)
+
+  }
+
+}
+
+module.exports = TouchstartSource
+
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const EventSource = __webpack_require__(4)
+
+class TouchmoveSource extends EventSource {
+
+  constructor(domNode, eventType = 'touchmove', options = { passive: false }) {
+
+    super(domNode, eventType, options)
+
+  }
+
+
+  addWhen(memo) {
+
+    return memo.event.type == 'touchstart'
+
+  }
+
+  removeWhen(memo) {
+
+    return B.include(['touchend', 'touchcancel'], memo.event.type)
+
+  }
+
+}
+
+module.exports = TouchmoveSource
+
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const EventSource = __webpack_require__(4)
+
+class TouchendSource extends EventSource {
+
+  constructor(domNode, eventType = 'touchend') {
+
+    super(domNode, eventType)
+
+  }
+
+
+  addWhen(memo) {
+
+    return memo.event.type == 'touchstart'
+
+  }
+
+  removeWhen(memo) {
+
+    return B.include(['touchend', 'touchcancel'], memo.event.type)
+
+  }
+
+}
+
+module.exports = TouchendSource
+
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const EventSource = __webpack_require__(4)
+
+class TouchcancelSource extends EventSource {
+
+  constructor(domNode, eventType = 'touchcancel') {
+
+    super(domNode, eventType)
+
+  }
+
+
+  addWhen(memo) {
+
+    return memo.event.type == 'touchstart'
+
+  }
+
+  removeWhen(memo) {
+
+    return B.include(['touchend', 'touchcancel'], memo.event.type)
+
+  }
+
+}
+
+module.exports = TouchcancelSource
+
+
+/***/ }),
+/* 100 */,
+/* 101 */,
+/* 102 */
+/***/ (function(module, exports) {
+
+const scrollContainer = ({ containerNode, intervalId, scrollDirection }) => {
+
+  const containerBox = containerNode.getBoundingClientRect()
+
+  switch (scrollDirection) {
+
+    case 'top': {
+
+      if (containerNode.scrollTop == 0) {
+
+        clearInterval(intervalId)
+
+        return null
+
+      }
+
+      containerNode.scrollTop = containerNode.scrollTop - 1
+
+      break
+    }
+
+    case 'bottom': {
+
+      if (containerNode.scrollTop == containerBox.height) {
+
+        clearInterval(intervalId)
+
+        return null
+
+      }
+
+      containerNode.scrollTop = containerNode.scrollTop + 1
+
+      break
+    }
+
+    case 'left': {
+
+      if (containerNode.scrollLeft == 0) {
+
+        clearInterval(intervalId)
+
+        return null
+
+      }
+
+      containerNode.scrollLeft = containerNode.scrollLeft - 1
+
+      break
+    }
+
+    case 'right': {
+
+      if (containerNode.scrollLeft == containerBox.width) {
+
+        clearInterval(intervalId)
+
+        return null
+
+      }
+
+      containerNode.scrollLeft = containerNode.scrollLeft + 1
+
+      break
+    }
+
+    default: {
+
+      throw new Error('Unrecognized scrollDirection: ' + scrollDirection)
+
+    }
+
+  }
+
+  return null
+
+}
+
+module.exports = scrollContainer
+
+
+/***/ }),
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */,
+/* 107 */,
+/* 108 */,
+/* 109 */,
+/* 110 */,
+/* 111 */
+/***/ (function(module, exports) {
+
+const getAlign = (type, shiftX, shiftY, width, height) => {
+
+  if (type == 'vertical') {
+
+    return (shiftY < height / 2) ? 'before' : 'after'
+
+  } else {
+
+    return (shiftX < width / 2) ? 'before' : 'after'
+
+  }
+
+}
+
+module.exports = getAlign
+
+
+/***/ }),
+/* 112 */,
+/* 113 */,
+/* 114 */,
+/* 115 */,
+/* 116 */,
+/* 117 */,
+/* 118 */,
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */
+/***/ (function(module, exports) {
+
+const getUniversalEventType = (eventType) => {
+
+  switch (eventType) {
+
+    case 'mousedown':
+    case 'touchstart': {
+
+      return 'start'
+
+    }
+
+    case 'mousemove':
+    case 'touchmove': {
+
+      return 'move'
+
+    }
+
+    case 'touchcancel':
+    case 'touchend':
+    case 'mouseup': {
+
+      return 'stop'
+
+    }
+
+    default: {
+
+      throw new Error('Unknown event type')
+
+    }
+
+  }
+
+}
+
+module.exports = getUniversalEventType
+
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { Component, html } = __webpack_require__(3)
+const Preview = __webpack_require__(11)
+const List = __webpack_require__(10)
+const User = __webpack_require__(19)
+const createSortable = __webpack_require__(20)
+
+class PageHorizontal extends Component {
+
+  constructor(props) {
+
+    super(props)
+
+    this.state = {
+      users: User.getAll().slice(0, 10)
+    }
+
+  }
+
+  afterMount() {
+
+    this.sortable = createSortable({
+      rootNode: this.refs.List.refs.list,
+      align: this.props.align,
+      isHandlerNode: domNode => domNode.textContent == '#',
+      scrollNode: document.querySelector('.sort__wrapper'),
+    })
+
+    this.sortable.subscribe((memo) => {
+
+      const { isNewPosition, draggablePosition, droppablePosition } = memo
+
+      if (isNewPosition) {
+
+        const newItems = B.move(
+          this.state.users,
+          draggablePosition,
+          droppablePosition
+        )
+
+        this.setState({ users: newItems })
+
+      }
+
+    })
+
+  }
+
+  beforeUnmount() {
+
+    this.sortable.unsubscribe()
+
+  }
+
+  render() {
+
+    return (
+      List.v({
+        ref: 'List',
+        items: this.state.users,
+        align: 'horizontal',
+      })
+    )
+
+  }
+
+}
+
+module.exports = PageHorizontal
+
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { Component, html } = __webpack_require__(3)
+const B = __webpack_require__(0)
+const Preview = __webpack_require__(11)
+const List = __webpack_require__(10)
+const User = __webpack_require__(19)
+const createSortable = __webpack_require__(20)
+
+class PageScroll extends Component {
+
+  constructor(props) {
+
+    super(props)
+
+    this.state = {
+      users: User.getAll()
+    }
+
+  }
+
+  afterMount() {
+
+    this.sortable = createSortable({
+      rootNode: this.refs.List.refs.list,
+      align: this.props.align,
+      isHandlerNode: domNode => domNode.textContent == '#',
+      scrollNode: document.querySelector('.sort__wrapper'),
+    })
+
+    this.sortable.subscribe((memo) => {
+
+      const { isNewPosition, draggablePosition, droppablePosition } = memo
+
+      if (isNewPosition) {
+
+        const newItems = B.move(
+          this.state.users,
+          draggablePosition,
+          droppablePosition
+        )
+
+        this.setState({ users: newItems })
+
+      }
+
+    })
+
+  }
+
+  beforeUnmount() {
+
+    this.sortable.unsubscribe()
+
+  }
+
+  render() {
+
+    const { div } = html
+
+    return [
+      div({ class: 'horizontal-dots' }),
+      div({ class: 'sort__wrapper' },
+        List.v({
+          ref: 'List',
+          align: 'horizontal',
+          items: this.state.users,
+        }),
+      ),
+      div({ class: 'vertical-dots' })
+    ]
+
+
+  }
+
+}
+
+module.exports = PageScroll
+
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { Component, html } = __webpack_require__(3)
+const Preview = __webpack_require__(11)
+const List = __webpack_require__(10)
+const User = __webpack_require__(19)
+const createSortable = __webpack_require__(20)
+
+class PageMultiple extends Component {
+
+  constructor(props, context) {
+
+    super(props, context)
+
+    this.state = {
+      users_1: User.getAll().slice(0, 10),
+      users_2: User.getAll().slice(10, 20),
+      users_3: User.getAll().slice(20, 30),
+    }
+
+  }
+
+  afterMount() {
+
+    const numbers = B.times(3 + 1).slice(1)
+
+    numbers.forEach(number => {
+
+      const depends = numbers
+        .filter(_number => _number != number)
+        .map(number => {
+
+          const name = 'users_' + number
+          const node = this.refs['List' + number].refs.list
+
+          return { name, node }
+
+        })
+
+      const sortableConfig = {
+        name: 'users_' + number,
+        depends,
+        rootNode: this.refs['List' + number].refs.list,
+        align: 'vertical',
+        isHandlerNode: domNode => domNode.textContent == '#',
+        scrollNode: document.querySelector('.sort__wrapper'),
+      }
+
+      this.sortable = createSortable(sortableConfig)
+
+      this.sortable.subscribe((memo) => {
+
+        const {
+          config,
+          isNewPosition,
+          draggablePosition,
+          droppablePosition,
+          droppableGroup,
+        } = memo
+
+        if (!isNewPosition) return null
+
+        if (droppableGroup.name == config.name) {
+
+          const newUsers = B.move(
+            this.state[droppableGroup.name],
+            draggablePosition,
+            droppablePosition
+          )
+
+          this.setState({ [droppableGroup.name]: newUsers })
+
+
+        } else {
+
+          const fromGroupName = config.name
+          const toGroupName = droppableGroup.name
+
+          const user = this.state[fromGroupName][draggablePosition]
+
+          const toUsers = B.insert(
+            this.state[toGroupName],
+            droppablePosition,
+            user
+          )
+
+          const fromUsers = this.state[fromGroupName]
+            .filter((user, index) => (index != draggablePosition))
+
+          const newUsers = {
+            [fromGroupName]: fromUsers,
+            [toGroupName]: toUsers
+          }
+
+          this.setState(newUsers)
+
+        }
+
+      })
+
+
+    })
+
+  }
+
+  beforeUnmount() {
+
+    this.sortable.unsubscribe()
+
+  }
+
+  render() {
+
+    const { div } = html
+
+    return [
+      div({ class: 'float-left' },
+        List.v({
+          ref: 'List1',
+          align: 'vertical',
+          items: this.state.users_1
+        }),
+      ),
+      div({ class: 'float-left' },
+        List.v({
+          ref: 'List2',
+          align: 'vertical',
+          items: this.state.users_2
+        })
+      ),
+      div({ class: 'float-left' },
+        List.v({
+          ref: 'List3',
+          align: 'vertical',
+          items: this.state.users_3
+        })
+      ),
+      div({ class: 'float-clear' })
+    ]
+
+  }
+
+}
+
+module.exports = PageMultiple
+
+
+/***/ }),
+/* 133 */,
+/* 134 */,
+/* 135 */
+/***/ (function(module, exports) {
+
+const createGroups = (memo) => {
+
+  const { config } = memo
+
+  const groups = [
+    ...config.depends,
+    {
+      name: config.name,
+      node: config.rootNode,
+    }
+  ]
+
+  return Object.assign({}, memo, { groups })
+
+}
+
+module.exports = createGroups
+
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { DRAG_MOVE, DRAG_STOP } = __webpack_require__(2)
+const scrollContainer = __webpack_require__(102)
+
+const createScrollActions = (memo) => {
+
+  const {
+    config,
+    isNeedScroll,
+    scrollDirections,
+    prevScrollDirections,
+    dragType,
+    scrollInterval
+  } = memo
+
+  const scrollActions = memo.scrollActions || []
+
+  if (dragType == DRAG_STOP) {
+
+    scrollActions.forEach(scrollAction => {
+
+      clearInterval(scrollAction.intervalId)
+
+    })
+
+  }
+
+  if (dragType != DRAG_MOVE || !isNeedScroll) return memo
+
+  const addScrollDirections =
+    scrollDirections.filter(scrollDirection => {
+
+      return !B.include(prevScrollDirections, scrollDirection)
+
+    })
+
+  const removeScrollDirections =
+    prevScrollDirections.filter(prevScrollDirection => {
+
+      return !B.include(scrollDirections, prevScrollDirection)
+
+    })
+
+  const addedScrollActions = addScrollDirections.map(addScrollDirection => {
+
+    const intervalId = setInterval(() => {
+
+      scrollContainer({
+        containerNode: config.scrollNode,
+        intervalId,
+        scrollDirection: addScrollDirection
+      })
+
+    }, config.scrollSpeed)
+
+    return {
+      direction: addScrollDirection,
+      intervalId
+    }
+
+  })
+
+  const removedScrollActions = scrollActions.filter(scrollAction => {
+
+    const isNeedSave = !B.include(
+      removeScrollDirections,
+      scrollAction.direction
+    )
+
+    if (!isNeedSave) {
+
+      clearInterval(scrollAction.intervalId)
+
+    }
+
+    return isNeedSave
+
+  })
+
+  const newScrollActions = [ ...addedScrollActions, ...removedScrollActions ]
+
+  return Object.assign({}, memo, { scrollActions: newScrollActions })
+
+}
+
+module.exports = createScrollActions
+
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { DRAG_MOVE } = __webpack_require__(2)
+
+const inRange = (number, range) => (number >= range.from && number <= range.to)
+
+const createScrollDirections = (memo) => {
+
+  const { isNeedScroll, config, universalEvent, dragType } = memo
+
+  if (!isNeedScroll || dragType != DRAG_MOVE) return memo
+
+  const scrollNodeBox = config.scrollNode.getBoundingClientRect()
+
+  const body = document.documentElement
+
+  const scrollTop = window.pageYOffset || body.scrollTop
+  const scrollLeft = window.pageXOffset || body.scrollLeft
+
+  const scrollFrameBox = {
+    top: Math.max(
+      scrollNodeBox.top + scrollTop,
+      scrollTop
+    ),
+    bottom: Math.min(
+      scrollNodeBox.bottom + scrollTop,
+      window.innerHeight + scrollTop
+    ),
+    left: Math.max(
+      scrollNodeBox.left + scrollLeft,
+      scrollLeft
+    ),
+    right: Math.min(
+      scrollNodeBox.right + scrollLeft,
+      window.innerWidth + scrollLeft
+    ),
+  }
+
+  const scrollHeight = scrollFrameBox.bottom - scrollFrameBox.top
+  const scrollWidth = scrollFrameBox.right - scrollFrameBox.left
+
+  const scrollFillHeight = scrollHeight / 2 / 100 * config.scrollFill
+  const scrollFillWidth = scrollWidth / 2 / 100 * config.scrollFill
+
+  const grouppedScrollRanges = {
+    horizontal: [
+      {
+        name: 'left',
+        from: -Infinity,
+        to: scrollFrameBox.left + scrollFillWidth,
+      },
+      {
+        name: 'right',
+        from: scrollFrameBox.right - scrollFillWidth,
+        to: Infinity,
+      }
+    ],
+    vertical: [
+      {
+        name: 'top',
+        from: -Infinity,
+        to: scrollFrameBox.top + scrollFillHeight,
+      },
+      {
+        name: 'bottom',
+        from: scrollFrameBox.bottom - scrollFillHeight,
+        to: Infinity,
+      },
+    ]
+  }
+
+  const isHorizontalScrollPresent = (
+    config.scrollNode.scrollWidth != config.scrollNode.clientWidth
+  )
+
+  const isVertivalScrollPresent = (
+    config.scrollNode.scrollHeight != config.scrollNode.clientHeight
+  )
+
+  const horizontalScrollRange = isHorizontalScrollPresent
+    ? grouppedScrollRanges.horizontal
+      .find(range => inRange(event.pageX, range))
+    : null
+
+  const verticalScrollRange = isVertivalScrollPresent
+    ? grouppedScrollRanges.vertical
+      .find(range => inRange(event.pageY, range))
+    : null
+
+  const scrollDirections = [ horizontalScrollRange, verticalScrollRange ]
+    .filter(range => range)
+    .map(range => range.name)
+
+  return Object.assign({}, memo, { scrollDirections })
+
+}
+
+module.exports = createScrollDirections
+
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports) {
+
+const createPrevScrollDirections = (memo) => {
+
+  const { isNeedScroll, scrollDirections } = memo
+
+  if (!isNeedScroll) return memo
+
+  return Object.assign({}, memo, {
+    prevScrollDirections: scrollDirections || []
+  })
+
+}
+
+module.exports = createPrevScrollDirections
+
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { DRAG_MOVE, DRAG_STOP } = __webpack_require__(2)
+const B = __webpack_require__(0)
+
+const isNeedScroll = (memo) => {
+
+  const { config, universalEvent, dragType, handlerNode } = memo
+
+  const isNeedScroll = (
+    config.scrollNode &&
+    handlerNode
+  )
+
+  return Object.assign({}, memo, { isNeedScroll })
+
+}
+
+module.exports = isNeedScroll
+
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports) {
+
+const createIsNewPosition = (memo) => {
+
+  const { isDroppableNew, draggablePosition, droppablePosition } = memo
+
+  const isNewPosition = (
+    isDroppableNew &&
+    draggablePosition != droppablePosition
+  )
+
+  if (isNewPosition)
+    console.log(memo.droppableNode)
+
+  return Object.assign({}, memo, { isNewPosition })
+
+}
+
+module.exports = createIsNewPosition
+
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports) {
+
+const createDroppablePosition = (memo) => {
+
+  const {
+    config,
+    dragType,
+    droppableNode,
+    droppableAlign,
+    draggableNode,
+    isDroppableNew,
+    draggablePosition,
+    droppableGroup,
+  } = memo
+
+  if (!isDroppableNew) return memo
+
+  const sortableDomNodes = Array.from(droppableGroup.node.childNodes)
+
+  const droppableIndex = sortableDomNodes
+    .findIndex(domNode => domNode.isSameNode(droppableNode))
+
+  const droppablePosition = droppableAlign == 'before'
+    ? (
+        droppableIndex < draggablePosition
+          ? droppableIndex
+          : droppableIndex - 1
+      )
+    : (
+        droppableIndex < draggablePosition
+          ? droppableIndex + 1
+          : droppableIndex
+      )
+
+  return Object.assign({}, memo, { droppablePosition })
+
+}
+
+module.exports = createDroppablePosition
+
+
+/***/ }),
+/* 142 */
+/***/ (function(module, exports) {
+
+const createDraggablePosition = (memo) => {
+
+  const { config, draggableNode, isDroppableNew, rootGroup } = memo
+
+  if (!isDroppableNew) return memo
+
+  const sortableDomNodes = Array.from(rootGroup.node.childNodes)
+
+  const draggablePosition = sortableDomNodes
+    .findIndex(domNode => domNode.isSameNode(draggableNode))
+
+  return Object.assign({}, memo, { draggablePosition })
+
+}
+
+module.exports = createDraggablePosition
+
+
+/***/ }),
+/* 143 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { DRAG_MOVE } = __webpack_require__(2)
+
+const isDroppableNew = (memo) => {
+
+  const {
+    dragType,
+    droppableNode,
+    prevDroppableNode,
+    droppableAlign,
+    prevDroppableAlign,
+    draggableNode,
+  } = memo
+
+
+  const droppableisDraggableNode = (
+    droppableNode &&
+    droppableNode.isSameNode(draggableNode)
+  )
+
+  if (!droppableNode || droppableisDraggableNode || dragType != DRAG_MOVE) {
+
+    return false
+
+  }
+
+  return (
+    !prevDroppableNode ||
+    !droppableNode.isSameNode(prevDroppableNode) ||
+    droppableNode.isSameNode(prevDroppableNode) &&
+    droppableAlign != prevDroppableAlign
+  )
+
+}
+
+const createIsDroppableNew = (memo) => {
+
+  return Object.assign({}, memo, { isDroppableNew: isDroppableNew(memo) })
+
+}
+
+module.exports = createIsDroppableNew
+
+
+/***/ }),
+/* 144 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { DRAG_MOVE } = __webpack_require__(2)
+const getShift = __webpack_require__(32)
+const getAlign = __webpack_require__(111)
+
+const createDroppableAlign = (memo) => {
+
+  const { dragType, droppableNode, config, universalEvent } = memo
+
+  if (dragType != DRAG_MOVE || !droppableNode) return memo
+
+  const droppableShift = getShift(droppableNode, universalEvent)
+
+  const droppableBoundings = droppableNode.getBoundingClientRect()
+
+  const droppableAlign = getAlign(
+    config.align,
+    droppableShift.x,
+    droppableShift.y,
+    droppableBoundings.width,
+    droppableBoundings.height
+  )
+
+  return Object.assign({}, memo, { droppableAlign })
+
+}
+
+module.exports = createDroppableAlign
+
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports) {
+
+const createPrevDroppableAlign = (memo) => {
+
+  const { droppableAlign } = memo
+
+  if (!droppableAlign) return memo
+
+  return Object.assign({}, memo, { prevDroppableAlign: droppableAlign })
+
+}
+
+module.exports = createPrevDroppableAlign
+
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { DRAG_MOVE } = __webpack_require__(2)
+const findParentNodes = __webpack_require__(5)
+
+const createDroppableNode = (memo) => {
+
+  const { config, dragType, droppableTargetParentNodes, droppableGroup } = memo
+
+  if (dragType != DRAG_MOVE) return memo
+
+  const droppableNode = droppableTargetParentNodes.find(domNode => {
+
+    return config.isDroppableNode(domNode, droppableGroup.node)
+
+  })
+
+  return Object.assign({}, memo, { droppableNode })
+
+}
+
+module.exports = createDroppableNode
+
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { DRAG_MOVE } = __webpack_require__(2)
+const findParentNodes = __webpack_require__(5)
+
+const createDroppableGroup = (memo) => {
+
+  const { config, dragType, droppableTargetParentNodes, groups } = memo
+
+  if (dragType != DRAG_MOVE) return memo
+
+  const droppableGroupNode = B.last(droppableTargetParentNodes)
+
+  const droppableGroup = groups.find(group => {
+
+    return group.node.isSameNode(droppableGroupNode)
+
+  })
+
+  return Object.assign({}, memo, { droppableGroup: droppableGroup })
+
+}
+
+module.exports = createDroppableGroup
+
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { DRAG_MOVE } = __webpack_require__(2)
+const findParentNodes = __webpack_require__(5)
+
+const createDroppableTargetParentNodes = (memo) => {
+
+  const { dragType, droppableTargetNode, groups } = memo
+
+  if (dragType != DRAG_MOVE) return memo
+
+  const droppableTargetParentNodes =
+    findParentNodes(droppableTargetNode, domNode => (
+      groups.find(group => group.node.isSameNode(domNode))
+    ))
+
+  return Object.assign({}, memo, { droppableTargetParentNodes })
+
+}
+
+module.exports = createDroppableTargetParentNodes
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { DRAG_MOVE } = __webpack_require__(2)
+
+const createDroppableTargetNode = (memo) => {
+
+  const { dragType, universalEvent } = memo
+
+  if (dragType != DRAG_MOVE) return memo
+
+  const droppableTargetNode =
+    document.elementFromPoint(
+      universalEvent.clientX,
+      universalEvent.clientY
+    )
+
+  return Object.assign({}, memo, { droppableTargetNode })
+
+}
+
+module.exports = createDroppableTargetNode
+
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports) {
+
+const createPrevDroppableNode = (memo) => {
+
+  const { droppableNode } = memo
+
+  if (!droppableNode) return memo
+
+  return Object.assign({}, memo, { prevDroppableNode: droppableNode })
+  
+}
+
+module.exports = createPrevDroppableNode
+
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { DRAG_START, DRAG_MOVE, DRAG_STOP } = __webpack_require__(2)
+
+const createGhostCoords = (memo) => {
+
+  const {
+    startUniversalEvent,
+    universalEvent,
+    draggableShift,
+    dragType
+  } = memo
+
+  switch (dragType) {
+
+    case DRAG_START: {
+
+      const x = startUniversalEvent.pageX - draggableShift.x
+      const y = startUniversalEvent.pageY - draggableShift.y
+
+      return Object.assign({}, memo, { ghostCoords: { x, y } })
+
+    }
+
+    case DRAG_MOVE: {
+
+      const x = universalEvent.pageX - draggableShift.x
+      const y = universalEvent.pageY - draggableShift.y
+
+      return Object.assign({}, memo, { ghostCoords: { x, y } })
 
     }
 
@@ -5590,7 +6206,374 @@ const createGhostRootNode = (memo) => {
 
 }
 
+module.exports = createGhostCoords
+
+
+/***/ }),
+/* 152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { DRAG_START } = __webpack_require__(2)
+const getShift = __webpack_require__(32)
+
+const createDraggableShift = (memo) => {
+
+  const { draggableNode, startUniversalEvent, config, dragType } = memo
+
+  if (dragType != DRAG_START) return memo
+
+  const draggableShift = getShift(draggableNode, startUniversalEvent)
+
+  return Object.assign({}, memo, { draggableShift })
+
+}
+
+module.exports = createDraggableShift
+
+
+/***/ }),
+/* 153 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { DRAG_START } = __webpack_require__(2)
+
+const createGhostRootNode = (memo) => {
+
+  const { config, rootGroup } = memo
+
+  if (!config.cloneRootNode || memo.dragType != DRAG_START) return memo
+
+  const ghostRootNode = rootGroup.node.cloneNode()
+
+  return Object.assign({}, memo, { ghostRootNode })
+
+}
+
 module.exports = createGhostRootNode
+
+
+/***/ }),
+/* 154 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const { DRAG_START } = __webpack_require__(2)
+
+const createGhostNode = (memo) => {
+
+  if (memo.dragType != DRAG_START) return memo
+
+  const { draggableNode, config } = memo
+
+  const ghostNode = draggableNode.cloneNode(true)
+
+  const boundings = draggableNode.getBoundingClientRect()
+
+  ghostNode.style.position = 'absolute'
+  ghostNode.style.zIndex = 1000
+  ghostNode.style.top = '0px'
+  ghostNode.style.left = '0px'
+  ghostNode.style.willChange = 'all'
+  ghostNode.style.pointerEvents = 'none'
+  ghostNode.classList.add(config.ghostClassName)
+
+  ghostNode.ondragstart = () => false
+
+  return Object.assign({}, memo, { ghostNode })
+
+}
+
+module.exports = createGhostNode
+
+
+/***/ }),
+/* 155 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { DRAG_START, DRAG_STOP, DRAG_MOVE } = __webpack_require__(2)
+
+const createDragType = (memo) => {
+
+  const {
+    universalEvent,
+    handlerNode,
+    draggableNode,
+    dragStart,
+    prevDragStart
+  } = memo
+
+  switch (universalEvent.type) {
+
+    case 'start': {
+
+      return Object.assign({}, memo, { dragType: null })
+
+    }
+
+    case 'move': {
+
+      if (!dragStart || !handlerNode || !draggableNode) {
+
+        return Object.assign({}, memo, { dragType: null })
+
+      } else
+
+      if (dragStart && !prevDragStart) {
+
+        return Object.assign({}, memo, { dragType: DRAG_START })
+
+      } else {
+
+        return Object.assign({}, memo, { dragType: DRAG_MOVE })
+
+      }
+
+    }
+
+    case 'stop': {
+
+      if (!B.include([DRAG_MOVE, DRAG_STOP], memo.dragType)) return memo
+
+      return Object.assign({}, memo, { dragType: DRAG_STOP })
+
+    }
+
+    default: {
+
+      throw new Error('Unknow universalEvent.type: ' + universalEvent.type)
+
+    }
+
+  }
+
+}
+
+module.exports = createDragType
+
+
+/***/ }),
+/* 156 */
+/***/ (function(module, exports) {
+
+const createDragStart = (memo) => {
+
+  const { config, universalEvent, startUniversalEvent } = memo
+
+  switch (universalEvent.type) {
+
+    case 'start': {
+
+      return memo
+
+    }
+
+    case 'move': {
+
+      if (memo.dragStart) return memo
+
+      const diffX = Math.abs(
+        startUniversalEvent.clientX - universalEvent.clientX
+      )
+
+      const diffY = Math.abs(
+        startUniversalEvent.clientY - universalEvent.clientY
+      )
+
+      const dragStart = (
+        diffX > config.dragStartDistance ||
+        diffY > config.dragStartDistance
+      )
+
+      return Object.assign({}, memo, { dragStart })
+
+    }
+
+    case 'stop': {
+
+      return Object.assign({}, memo, { dragStart: false })
+
+    }
+
+    default: {
+
+      throw new Error('Unknown universalEvent.type: ' + universalEvent.type)
+
+    }
+
+  }
+
+}
+
+module.exports = createDragStart
+
+
+/***/ }),
+/* 157 */
+/***/ (function(module, exports) {
+
+const createPrevDragStart = (memo) => {
+
+  const { dragStart } = memo
+
+  return Object.assign({}, memo, { prevDragStart: dragStart })
+
+}
+
+module.exports = createPrevDragStart
+
+
+/***/ }),
+/* 158 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const findParentNodes = __webpack_require__(5)
+
+const createHandlerNode = (memo) => {
+
+  const { universalEvent, config } = memo
+
+  if (universalEvent.type != 'start') return memo
+
+  const handlerNode = B.last(
+    findParentNodes(universalEvent.target, config.isHandlerNode)
+  )
+
+  return Object.assign({}, memo, { handlerNode })
+
+}
+
+module.exports = createHandlerNode
+
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const findParentNodes = __webpack_require__(5)
+
+const createDraggableNode = (memo) => {
+
+  const { universalEvent, config } = memo
+
+  if (universalEvent.type != 'start') return memo
+
+  const draggableNode = B.last(
+    findParentNodes(universalEvent.target, config.isDraggableNode)
+  )
+
+  return Object.assign({}, memo, { draggableNode })
+
+}
+
+module.exports = createDraggableNode
+
+
+/***/ }),
+/* 160 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { DRAG_MOVE } = __webpack_require__(2)
+
+const createRootGroup = (memo) => {
+
+  const { dragType, isDroppableNew, droppableGroup } = memo
+
+  if (dragType != DRAG_MOVE || !isDroppableNew ) return memo
+
+  const rootGroup = droppableGroup
+
+  return Object.assign({}, memo, { rootGroup })
+
+}
+
+module.exports = createRootGroup
+
+
+/***/ }),
+/* 161 */
+/***/ (function(module, exports) {
+
+const createStartUniversalEvent = (memo) => {
+
+  const { universalEvent } = memo
+
+  if (universalEvent.type != 'start') return memo
+
+  return Object.assign({}, memo, { startUniversalEvent: universalEvent })
+
+}
+
+module.exports = createStartUniversalEvent
+
+
+/***/ }),
+/* 162 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const getUniversalEventType = __webpack_require__(129)
+
+const createUniversalEvent = (memo) => {
+
+  const { event } = memo
+
+  const haveTargetTouches = event.targetTouches && event.targetTouches.length
+
+  const coords = haveTargetTouches
+    ? {
+        pageX: event.targetTouches[0].pageX,
+        pageY: event.targetTouches[0].pageY,
+        clientX: event.targetTouches[0].clientX,
+        clientY: event.targetTouches[0].clientY,
+      }
+    : {
+        pageX: event.pageX,
+        pageY: event.pageY,
+        clientX: event.clientX,
+        clientY: event.clientY,
+      }
+
+  const type = getUniversalEventType(event.type)
+  const isTouch = !!event.type.match(/^touch/)
+
+  const common = {
+    type,
+    isTouch,
+    haveTargetTouches,
+    cancelable: event.cancelable,
+    target: event.target,
+    originalEvent: event,
+  }
+
+  const universalEvent = Object.assign({}, coords, common)
+
+  return Object.assign({}, memo, { universalEvent })
+
+}
+
+module.exports = createUniversalEvent
+
+
+/***/ }),
+/* 163 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const B = __webpack_require__(0)
+const { DRAG_MOVE } = __webpack_require__(2)
+
+const createRootGroup = (memo) => {
+
+  const { config } = memo
+
+  const rootGroup = { name: config.name, node: config.rootNode }
+
+  return Object.assign({}, memo, { rootGroup })
+
+}
+
+module.exports = createRootGroup
 
 
 /***/ })
