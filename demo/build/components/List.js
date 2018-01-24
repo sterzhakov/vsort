@@ -1,4 +1,5 @@
 const { Component, html } = require('vqua')
+const B = require('berries')
 
 class List extends Component {
 
@@ -9,7 +10,10 @@ class List extends Component {
     return (
       ul({
         ref: 'list',
-        class: 'sort noselect',
+        class: B.classNames('sort', 'noselect', {
+          'sort__vertical':   this.props.align == 'vertical',
+          'sort__horizontal': this.props.align == 'horizontal',
+        }),
       },
         this.props.items.length
           ? null

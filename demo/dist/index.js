@@ -381,6 +381,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 const { Component, html } = __webpack_require__(3)
+const B = __webpack_require__(0)
 
 class List extends Component {
 
@@ -391,7 +392,10 @@ class List extends Component {
     return (
       ul({
         ref: 'list',
-        class: 'sort noselect',
+        class: B.classNames('sort', 'noselect', {
+          'sort__vertical':   this.props.align == 'vertical',
+          'sort__horizontal': this.props.align == 'horizontal',
+        }),
       },
         this.props.items.length
           ? null
@@ -5482,7 +5486,7 @@ class PageMultiple extends Component {
 
     const numbers = B.times(3 + 1).slice(1)
 
-    numbers.forEach(number => {
+    this.sortables = numbers.map(number => {
 
       const depends = numbers
         .filter(_number => _number != number)
@@ -5504,9 +5508,9 @@ class PageMultiple extends Component {
         scrollNode: document.querySelector('.sort__wrapper'),
       }
 
-      this.sortable = createSortable(sortableConfig)
+      const sortable = createSortable(sortableConfig)
 
-      this.sortable.subscribe((memo) => {
+      sortable.subscribe((memo) => {
 
         const {
           config,
@@ -5556,6 +5560,7 @@ class PageMultiple extends Component {
 
       })
 
+      return sortable
 
     })
 
@@ -5563,7 +5568,7 @@ class PageMultiple extends Component {
 
   beforeUnmount() {
 
-    this.sortable.unsubscribe()
+    this.sortables.forEach(sortable => sortable.unsubscribe())
 
   }
 

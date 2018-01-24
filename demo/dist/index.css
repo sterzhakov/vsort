@@ -66,6 +66,10 @@ ul.menu {
   width: 200px;
 }
 
+ul.sort__vertical li {
+  min-width: 140px;
+}
+
 
 li {
   display: block;
@@ -74,7 +78,6 @@ li {
   background-color: #f2f2f2;
   border-bottom: 1px solid #e2e2e2;
   list-style: none;
-  min-width: 140px;
 }
 
 .preview {
