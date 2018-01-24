@@ -9,26 +9,37 @@ const createDroppablePosition = (memo) => {
     isDroppableNew,
     draggablePosition,
     droppableGroup,
+    rootGroup
   } = memo
 
   if (!isDroppableNew) return memo
 
-  const sortableDomNodes = Array.from(droppableGroup.node.childNodes)
+  const droppableRootChilds = Array.from(droppableGroup.node.childNodes)
 
-  const droppableIndex = sortableDomNodes
+  const droppableIndex = droppableRootChilds
     .findIndex(domNode => domNode.isSameNode(droppableNode))
 
-  const droppablePosition = droppableAlign == 'before'
-    ? (
-        droppableIndex < draggablePosition
-          ? droppableIndex
-          : droppableIndex - 1
-      )
-    : (
-        droppableIndex < draggablePosition
-          ? droppableIndex + 1
-          : droppableIndex
-      )
+  const droppablePosition = (() => {
+
+    if (config.isEmptyNode(droppableNode)) return 0
+
+    const groupIndex = droppableGroup.name == rootGroup.name ? 0 : 1
+
+    return (
+      droppableAlign == 'before'
+        ? (
+            droppableIndex < draggablePosition
+              ? droppableIndex
+              : droppableIndex - 1
+          )
+        : (
+            droppableIndex < draggablePosition
+              ? droppableIndex + 1
+              : droppableIndex
+          )
+    ) + groupIndex
+
+  })()
 
   return Object.assign({}, memo, { droppablePosition })
 

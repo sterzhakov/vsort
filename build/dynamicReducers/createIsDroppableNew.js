@@ -1,6 +1,6 @@
 const { DRAG_MOVE } = require('../constants')
 
-const isDroppableNew = (memo) => {
+const checkIsDroppableNew = (memo) => {
 
   const {
     dragType,
@@ -11,13 +11,12 @@ const isDroppableNew = (memo) => {
     draggableNode,
   } = memo
 
-
-  const droppableisDraggableNode = (
+  const droppableIsDraggableNode = (
     droppableNode &&
     droppableNode.isSameNode(draggableNode)
   )
 
-  if (!droppableNode || droppableisDraggableNode || dragType != DRAG_MOVE) {
+  if (!droppableNode || droppableIsDraggableNode || dragType != DRAG_MOVE) {
 
     return false
 
@@ -34,7 +33,9 @@ const isDroppableNew = (memo) => {
 
 const createIsDroppableNew = (memo) => {
 
-  return Object.assign({}, memo, { isDroppableNew: isDroppableNew(memo) })
+  const isDroppableNew = checkIsDroppableNew(memo)
+
+  return Object.assign({}, memo, { isDroppableNew })
 
 }
 

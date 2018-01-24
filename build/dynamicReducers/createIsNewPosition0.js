@@ -5,19 +5,20 @@ const createIsNewPosition = (memo) => {
     draggablePosition,
     droppablePosition,
     droppableGroup,
-    rootGroup,
     config
   } = memo
 
+  console.log(memo.rootGroup)
+
   const isNewPosition = (
-    isDroppableNew && (
-      droppableGroup.name == rootGroup.name &&
-      droppableGroup &&
-      draggablePosition != droppablePosition
-      ||
-      droppableGroup.name != rootGroup.name &&
-      droppableGroup
-    )
+    droppableGroup &&
+    droppableGroup.name == config.name &&
+    isDroppableNew &&
+    draggablePosition != droppablePosition
+    ||
+    droppableGroup &&
+    droppableGroup.name != config.name &&
+    isDroppableNew
   )
 
   // console.log(isNewPosition)

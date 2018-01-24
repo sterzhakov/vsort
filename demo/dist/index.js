@@ -393,6 +393,15 @@ class List extends Component {
         ref: 'list',
         class: 'sort noselect',
       },
+        this.props.items.length
+          ? null
+          : li({
+              'data-sortable-empty': 'true',
+              class: 'sort__item',
+              key: 'empty',
+            },
+              'list is empty'
+            ),
         this.props.items.map((item) => {
           return (
             li({
@@ -777,6 +786,7 @@ const dynamicReducers = [
   __webpack_require__(158),
   __webpack_require__(159),
   __webpack_require__(160),
+  __webpack_require__(164),
   __webpack_require__(161),
   __webpack_require__(162),
 ]
@@ -791,6 +801,8 @@ const createSortable = (statedConfig = {}) => {
     domNode.parentNode.isSameNode(rootNode)
   )
 
+  const isEmptyNode = (domNode) => domNode.dataset.sortableEmpty == 'true'
+
   const defaultConfig = {
     name: 'root',
     rootNode: null,
@@ -800,6 +812,7 @@ const createSortable = (statedConfig = {}) => {
     isDraggableNode,
     isHandlerNode: isDraggableNode,
     isDroppableNode,
+    isEmptyNode,
     ghostClassName: 'sortable__ghost',
     draggableClassName: 'sortable__draggable',
     ghostWrapperNode: document.body,
@@ -5458,9 +5471,9 @@ class PageMultiple extends Component {
     super(props, context)
 
     this.state = {
-      users_1: User.getAll().slice(0, 10),
-      users_2: User.getAll().slice(10, 20),
-      users_3: User.getAll().slice(20, 30),
+      users_1: User.getAll().slice(0, 0),
+      users_2: User.getAll().slice(1, 5),
+      users_3: User.getAll().slice(10, 20),
     }
 
   }
@@ -5501,11 +5514,15 @@ class PageMultiple extends Component {
           draggablePosition,
           droppablePosition,
           droppableGroup,
+          rootGroup,
         } = memo
 
         if (!isNewPosition) return null
 
-        if (droppableGroup.name == config.name) {
+        const fromGroupName = rootGroup.name
+        const toGroupName = droppableGroup.name
+
+        if (droppableGroup.name == rootGroup.name) {
 
           const newUsers = B.move(
             this.state[droppableGroup.name],
@@ -5515,11 +5532,7 @@ class PageMultiple extends Component {
 
           this.setState({ [droppableGroup.name]: newUsers })
 
-
         } else {
-
-          const fromGroupName = config.name
-          const toGroupName = droppableGroup.name
 
           const user = this.state[fromGroupName][draggablePosition]
 
@@ -5857,15 +5870,27 @@ module.exports = isNeedScroll
 
 const createIsNewPosition = (memo) => {
 
-  const { isDroppableNew, draggablePosition, droppablePosition } = memo
+  const {
+    isDroppableNew,
+    draggablePosition,
+    droppablePosition,
+    droppableGroup,
+    rootGroup,
+    config
+  } = memo
 
   const isNewPosition = (
-    isDroppableNew &&
-    draggablePosition != droppablePosition
+    isDroppableNew && (
+      droppableGroup.name == rootGroup.name &&
+      droppableGroup &&
+      draggablePosition != droppablePosition
+      ||
+      droppableGroup.name != rootGroup.name &&
+      droppableGroup
+    )
   )
 
-  if (isNewPosition)
-    console.log(memo.droppableNode)
+  // console.log(isNewPosition)
 
   return Object.assign({}, memo, { isNewPosition })
 
@@ -5889,26 +5914,37 @@ const createDroppablePosition = (memo) => {
     isDroppableNew,
     draggablePosition,
     droppableGroup,
+    rootGroup
   } = memo
 
   if (!isDroppableNew) return memo
 
-  const sortableDomNodes = Array.from(droppableGroup.node.childNodes)
+  const droppableRootChilds = Array.from(droppableGroup.node.childNodes)
 
-  const droppableIndex = sortableDomNodes
+  const droppableIndex = droppableRootChilds
     .findIndex(domNode => domNode.isSameNode(droppableNode))
 
-  const droppablePosition = droppableAlign == 'before'
-    ? (
-        droppableIndex < draggablePosition
-          ? droppableIndex
-          : droppableIndex - 1
-      )
-    : (
-        droppableIndex < draggablePosition
-          ? droppableIndex + 1
-          : droppableIndex
-      )
+  const droppablePosition = (() => {
+
+    if (config.isEmptyNode(droppableNode)) return 0
+
+    const groupIndex = droppableGroup.name == rootGroup.name ? 0 : 1
+
+    return (
+      droppableAlign == 'before'
+        ? (
+            droppableIndex < draggablePosition
+              ? droppableIndex
+              : droppableIndex - 1
+          )
+        : (
+            droppableIndex < draggablePosition
+              ? droppableIndex + 1
+              : droppableIndex
+          )
+    ) + groupIndex
+
+  })()
 
   return Object.assign({}, memo, { droppablePosition })
 
@@ -5945,7 +5981,7 @@ module.exports = createDraggablePosition
 
 const { DRAG_MOVE } = __webpack_require__(2)
 
-const isDroppableNew = (memo) => {
+const checkIsDroppableNew = (memo) => {
 
   const {
     dragType,
@@ -5956,13 +5992,12 @@ const isDroppableNew = (memo) => {
     draggableNode,
   } = memo
 
-
-  const droppableisDraggableNode = (
+  const droppableIsDraggableNode = (
     droppableNode &&
     droppableNode.isSameNode(draggableNode)
   )
 
-  if (!droppableNode || droppableisDraggableNode || dragType != DRAG_MOVE) {
+  if (!droppableNode || droppableIsDraggableNode || dragType != DRAG_MOVE) {
 
     return false
 
@@ -5979,7 +6014,9 @@ const isDroppableNew = (memo) => {
 
 const createIsDroppableNew = (memo) => {
 
-  return Object.assign({}, memo, { isDroppableNew: isDroppableNew(memo) })
+  const isDroppableNew = checkIsDroppableNew(memo)
+
+  return Object.assign({}, memo, { isDroppableNew })
 
 }
 
@@ -6455,7 +6492,24 @@ const findParentNodes = __webpack_require__(5)
 
 const createDraggableNode = (memo) => {
 
-  const { universalEvent, config } = memo
+  const {
+    universalEvent,
+    config,
+    isNewPosition,
+    rootGroup,
+    prevRootGroup,
+    droppablePosition
+  } = memo
+
+  // see here!!!
+
+  if (isNewPosition && prevRootGroup.name != rootGroup.name) {
+
+    const draggableNode = rootGroup.node.childNodes[droppablePosition]
+
+    return Object.assign({}, memo, { draggableNode })
+
+  }
 
   if (universalEvent.type != 'start') return memo
 
@@ -6475,11 +6529,19 @@ module.exports = createDraggableNode
 /***/ (function(module, exports, __webpack_require__) {
 
 const B = __webpack_require__(0)
-const { DRAG_MOVE } = __webpack_require__(2)
+const { DRAG_MOVE, DRAG_STOP } = __webpack_require__(2)
 
 const createRootGroup = (memo) => {
 
-  const { dragType, isDroppableNew, droppableGroup } = memo
+  const { dragType, isDroppableNew, droppableGroup, config } = memo
+
+  if (dragType == DRAG_STOP) {
+
+    return Object.assign({}, memo, {
+      rootGroup: { name: config.name, node: config.rootNode }
+    })
+
+  }
 
   if (dragType != DRAG_MOVE || !isDroppableNew ) return memo
 
@@ -6574,6 +6636,21 @@ const createRootGroup = (memo) => {
 }
 
 module.exports = createRootGroup
+
+
+/***/ }),
+/* 164 */
+/***/ (function(module, exports) {
+
+const createPrevRootGroup = (memo) => {
+
+  const { rootGroup } = memo
+
+  return Object.assign({}, memo, { prevRootGroup: rootGroup })
+
+}
+
+module.exports = createPrevRootGroup
 
 
 /***/ })

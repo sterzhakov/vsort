@@ -41,6 +41,7 @@ const dynamicReducers = [
   require('./dynamicReducers/createHandlerNode'),
   require('./dynamicReducers/createDraggableNode'),
   require('./dynamicReducers/createRootGroup'),
+  require('./dynamicReducers/createPrevRootGroup'),
   require('./dynamicReducers/createStartUniversalEvent'),
   require('./dynamicReducers/createUniversalEvent'),
 ]
@@ -55,6 +56,8 @@ const createSortable = (statedConfig = {}) => {
     domNode.parentNode.isSameNode(rootNode)
   )
 
+  const isEmptyNode = (domNode) => domNode.dataset.sortableEmpty == 'true'
+
   const defaultConfig = {
     name: 'root',
     rootNode: null,
@@ -64,6 +67,7 @@ const createSortable = (statedConfig = {}) => {
     isDraggableNode,
     isHandlerNode: isDraggableNode,
     isDroppableNode,
+    isEmptyNode,
     ghostClassName: 'sortable__ghost',
     draggableClassName: 'sortable__draggable',
     ghostWrapperNode: document.body,
