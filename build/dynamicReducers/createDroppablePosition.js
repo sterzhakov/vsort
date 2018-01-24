@@ -23,7 +23,10 @@ const createDroppablePosition = (memo) => {
 
     if (config.isEmptyNode(droppableNode)) return 0
 
-    const groupIndex = droppableGroup.name == rootGroup.name ? 0 : 1
+    const groupIndex = (
+      droppableGroup.name != rootGroup.name &&
+      droppableGroup.node.childNodes.length != 1
+    ) ? 1 : 0
 
     return (
       droppableAlign == 'before'

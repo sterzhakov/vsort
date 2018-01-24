@@ -5475,8 +5475,8 @@ class PageMultiple extends Component {
     super(props, context)
 
     this.state = {
-      users_1: User.getAll().slice(0, 0),
-      users_2: User.getAll().slice(1, 5),
+      users_1: User.getAll().slice(0, 1),
+      users_2: User.getAll().slice(2, 5),
       users_3: User.getAll().slice(10, 20),
     }
 
@@ -5513,7 +5513,6 @@ class PageMultiple extends Component {
       sortable.subscribe((memo) => {
 
         const {
-          config,
           isNewPosition,
           draggablePosition,
           droppablePosition,
@@ -5933,7 +5932,10 @@ const createDroppablePosition = (memo) => {
 
     if (config.isEmptyNode(droppableNode)) return 0
 
-    const groupIndex = droppableGroup.name == rootGroup.name ? 0 : 1
+    const groupIndex = (
+      droppableGroup.name != rootGroup.name &&
+      droppableGroup.node.childNodes.length != 1
+    ) ? 1 : 0
 
     return (
       droppableAlign == 'before'
