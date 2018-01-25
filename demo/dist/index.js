@@ -5941,7 +5941,7 @@ const createDroppablePosition = (memo) => {
 
     const groupIndex = (
       droppableGroup.name != rootGroup.name &&
-      droppableGroup.node.childNodes.length != 1
+      droppableNode.nextSibling
     ) ? 1 : 0
 
     return (
@@ -5959,6 +5959,7 @@ const createDroppablePosition = (memo) => {
     ) + groupIndex
 
   })()
+
 
   return Object.assign({}, memo, { droppablePosition })
 
