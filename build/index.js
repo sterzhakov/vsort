@@ -2,6 +2,7 @@ const B                 = require('berries')
 const findConfigErrors  = require('./core/findConfigErrors')
 const Stream            = require('./core/Stream')
 const moveGhostNode     = require('./core/moveGhostNode')
+const createDomStorage  = require('./core/createDomStorage')
 const MousedownSource   = require('./sources/MousedownSource')
 const MousemoveSource   = require('./sources/MousemoveSource')
 const MouseupSource     = require('./sources/MouseupSource')
@@ -11,6 +12,9 @@ const TouchendSource    = require('./sources/TouchendSource')
 const TouchcancelSource = require('./sources/TouchcancelSource')
 
 const staticReducers = [
+  require('./staticReducers/createStorageNode'),
+  require('./staticReducers/createStorageGhostNode'),
+  require('./staticReducers/createStorageDraggableNode'),
   require('./staticReducers/createGroups'),
   require('./staticReducers/createRootGroup'),
 ]
@@ -70,7 +74,6 @@ const createSortable = (statedConfig = {}) => {
     isEmptyNode,
     ghostClassName: 'sortable__ghost',
     draggableClassName: 'sortable__draggable',
-    ghostWrapperNode: document.body,
     touchEvents: true,
     mouseEvents: true,
     cloneRootNode: true,
@@ -79,6 +82,7 @@ const createSortable = (statedConfig = {}) => {
     scrollSpeed: 5,
     dynamicReducers: [],
     staticReducers: [],
+    storageWrapperNode: document.body,
   }
 
   const config = Object.assign({}, defaultConfig, statedConfig)
@@ -112,6 +116,8 @@ const createSortable = (statedConfig = {}) => {
       ...config.dynamicReducers
     ]
   )
+
+  createDomStorage(initialMemo)
 
   return stream.reduce((memo, event) => {
 

@@ -751,6 +751,7 @@ const B                 = __webpack_require__(0)
 const findConfigErrors  = __webpack_require__(89)
 const Stream            = __webpack_require__(90)
 const moveGhostNode     = __webpack_require__(91)
+const createDomStorage  = __webpack_require__(168)
 const MousedownSource   = __webpack_require__(93)
 const MousemoveSource   = __webpack_require__(94)
 const MouseupSource     = __webpack_require__(95)
@@ -760,6 +761,9 @@ const TouchendSource    = __webpack_require__(98)
 const TouchcancelSource = __webpack_require__(99)
 
 const staticReducers = [
+  __webpack_require__(165),
+  __webpack_require__(166),
+  __webpack_require__(167),
   __webpack_require__(135),
   __webpack_require__(163),
 ]
@@ -819,7 +823,6 @@ const createSortable = (statedConfig = {}) => {
     isEmptyNode,
     ghostClassName: 'sortable__ghost',
     draggableClassName: 'sortable__draggable',
-    ghostWrapperNode: document.body,
     touchEvents: true,
     mouseEvents: true,
     cloneRootNode: true,
@@ -828,6 +831,7 @@ const createSortable = (statedConfig = {}) => {
     scrollSpeed: 5,
     dynamicReducers: [],
     staticReducers: [],
+    storageWrapperNode: document.body,
   }
 
   const config = Object.assign({}, defaultConfig, statedConfig)
@@ -861,6 +865,8 @@ const createSortable = (statedConfig = {}) => {
       ...config.dynamicReducers
     ]
   )
+
+  createDomStorage(initialMemo)
 
   return stream.reduce((memo, event) => {
 
@@ -4861,6 +4867,7 @@ const moveGhostNode = (memo) => {
     draggableNode,
     ghostCoords,
     ghostRootNode,
+    storageGhostNode,
   } = memo
 
   switch (dragType) {
@@ -4871,13 +4878,13 @@ const moveGhostNode = (memo) => {
 
       if (config.cloneRootNode) {
 
-        config.ghostWrapperNode.appendChild(ghostRootNode)
+        storageGhostNode.appendChild(ghostRootNode)
 
         ghostRootNode.appendChild(ghostNode)
 
       } else {
 
-        config.ghostWrapperNode.appendChild(ghostNode)
+        storageGhostNode.appendChild(ghostNode)
 
       }
 
@@ -6505,10 +6512,9 @@ const createDraggableNode = (memo) => {
     isNewPosition,
     rootGroup,
     prevRootGroup,
-    droppablePosition
+    droppablePosition,
+    storageDraggableNode,
   } = memo
-
-  // see here!!!
 
   if (isNewPosition && prevRootGroup.name != rootGroup.name) {
 
@@ -6524,7 +6530,15 @@ const createDraggableNode = (memo) => {
     findParentNodes(universalEvent.target, config.isDraggableNode)
   )
 
-  return Object.assign({}, memo, { draggableNode })
+  const draggableCloneNode = draggableNode.cloneNode(true)
+
+  draggableNode.parentNode.insertBefore(draggableCloneNode, draggableNode)
+
+  storageDraggableNode.innerHTML = ''
+  storageDraggableNode.appendChild(draggableNode)
+  draggableNode.style.display = 'none'
+
+  return Object.assign({}, memo, { draggableNode: draggableCloneNode })
 
 }
 
@@ -6658,6 +6672,73 @@ const createPrevRootGroup = (memo) => {
 }
 
 module.exports = createPrevRootGroup
+
+
+/***/ }),
+/* 165 */
+/***/ (function(module, exports) {
+
+const createStorageNode = (memo) => {
+
+  const { config } = memo
+
+  const storageNode = document.createElement('div')
+  storageNode.className = 'vsort__storage'
+
+  return Object.assign({}, memo, { storageNode })
+
+}
+
+module.exports = createStorageNode
+
+
+/***/ }),
+/* 166 */
+/***/ (function(module, exports) {
+
+const createStorageGhostNode = (memo) => {
+
+  const storageGhostNode = document.createElement('div')
+  storageGhostNode.className = 'vsort__storage__ghostNode'
+
+  return Object.assign({}, memo, { storageGhostNode })
+
+}
+
+module.exports = createStorageGhostNode
+
+
+/***/ }),
+/* 167 */
+/***/ (function(module, exports) {
+
+const createStorageDraggableNode = (memo) => {
+
+  const storageDraggableNode = document.createElement('div')
+  storageDraggableNode.className = 'vsort__storage__draggableNode'
+
+  return Object.assign({}, memo, { storageDraggableNode })
+
+}
+
+module.exports = createStorageDraggableNode
+
+
+/***/ }),
+/* 168 */
+/***/ (function(module, exports) {
+
+const createDomStorage = (memo) => {
+
+  const { config, storageNode, storageGhostNode, storageDraggableNode } = memo
+
+  config.storageWrapperNode.appendChild(storageNode)
+  storageNode.appendChild(storageGhostNode)
+  storageNode.appendChild(storageDraggableNode)
+
+}
+
+module.exports = createDomStorage
 
 
 /***/ })

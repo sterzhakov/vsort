@@ -10,6 +10,7 @@ const moveGhostNode = (memo) => {
     draggableNode,
     ghostCoords,
     ghostRootNode,
+    storageGhostNode,
   } = memo
 
   switch (dragType) {
@@ -20,13 +21,13 @@ const moveGhostNode = (memo) => {
 
       if (config.cloneRootNode) {
 
-        config.ghostWrapperNode.appendChild(ghostRootNode)
+        storageGhostNode.appendChild(ghostRootNode)
 
         ghostRootNode.appendChild(ghostNode)
 
       } else {
 
-        config.ghostWrapperNode.appendChild(ghostNode)
+        storageGhostNode.appendChild(ghostNode)
 
       }
 

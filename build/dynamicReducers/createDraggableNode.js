@@ -9,10 +9,9 @@ const createDraggableNode = (memo) => {
     isNewPosition,
     rootGroup,
     prevRootGroup,
-    droppablePosition
+    droppablePosition,
+    storageDraggableNode,
   } = memo
-
-  // see here!!!
 
   if (isNewPosition && prevRootGroup.name != rootGroup.name) {
 
@@ -28,7 +27,15 @@ const createDraggableNode = (memo) => {
     findParentNodes(universalEvent.target, config.isDraggableNode)
   )
 
-  return Object.assign({}, memo, { draggableNode })
+  const draggableCloneNode = draggableNode.cloneNode(true)
+
+  draggableNode.parentNode.insertBefore(draggableCloneNode, draggableNode)
+
+  storageDraggableNode.innerHTML = ''
+  storageDraggableNode.appendChild(draggableNode)
+  draggableNode.style.display = 'none'
+
+  return Object.assign({}, memo, { draggableNode: draggableCloneNode })
 
 }
 
