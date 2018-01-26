@@ -1,8 +1,8 @@
 {
   "name": "vsort",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sortable lists for any virtual dom.",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "test": "jasmine"
   },
@@ -28,7 +28,13 @@
   },
   "homepage": "https://github.com/sterzhakov/vsort#readme",
   "devDependencies": {
-    "jasmine": "^2.8.0"
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "jasmine": "^2.8.0",
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.10.0"
   },
   "dependencies": {
     "berries": "^1.0.6",

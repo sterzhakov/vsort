@@ -35,7 +35,7 @@ class Menu extends Component {
               a({
                 class: 'menu__link',
                 href: '#' + item.id,
-                onClick: () => this.handleClick({ event, item })
+                onClick: (event) => this.handleClick({ event, item })
               },
                 item.name
               )

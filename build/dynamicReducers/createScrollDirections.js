@@ -77,12 +77,12 @@ const createScrollDirections = (memo) => {
 
   const horizontalScrollRange = isHorizontalScrollPresent
     ? grouppedScrollRanges.horizontal
-      .find(range => inRange(event.pageX, range))
+      .find(range => inRange(universalEvent.originalEvent.pageX, range))
     : null
 
   const verticalScrollRange = isVertivalScrollPresent
     ? grouppedScrollRanges.vertical
-      .find(range => inRange(event.pageY, range))
+      .find(range => inRange(universalEvent.originalEvent.pageY, range))
     : null
 
   const scrollDirections = [ horizontalScrollRange, verticalScrollRange ]
