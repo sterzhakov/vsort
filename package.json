@@ -1,6 +1,6 @@
 {
   "name": "vsort",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Sortable lists for any virtual dom.",
   "main": "build/index.js",
   "scripts": {

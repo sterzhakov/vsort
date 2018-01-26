@@ -21,7 +21,7 @@ const scrollContainer = ({ containerNode, intervalId, scrollDirection }) => {
 
     case 'bottom': {
 
-      if (containerNode.scrollTop == containerBox.height) {
+      if (containerNode.scrollHeight == containerBox.height) {
 
         clearInterval(intervalId)
 
@@ -51,7 +51,7 @@ const scrollContainer = ({ containerNode, intervalId, scrollDirection }) => {
 
     case 'right': {
 
-      if (containerNode.scrollLeft == containerBox.width) {
+      if (containerNode.scrollWidth == containerBox.width) {
 
         clearInterval(intervalId)
 

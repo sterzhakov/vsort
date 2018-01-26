@@ -14631,7 +14631,7 @@ var scrollContainer = function scrollContainer(_ref) {
     case 'bottom':
       {
 
-        if (containerNode.scrollTop == containerBox.height) {
+        if (containerNode.scrollHeight == containerBox.height) {
 
           clearInterval(intervalId);
 
@@ -14661,7 +14661,7 @@ var scrollContainer = function scrollContainer(_ref) {
     case 'right':
       {
 
-        if (containerNode.scrollLeft == containerBox.width) {
+        if (containerNode.scrollWidth == containerBox.width) {
 
           clearInterval(intervalId);
 
