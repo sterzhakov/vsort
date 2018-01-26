@@ -29,6 +29,8 @@ const createDraggableNode = (memo) => {
 
   const draggableCloneNode = draggableNode.cloneNode(true)
 
+  draggableCloneNode.ondragstart = () => false
+
   draggableNode.parentNode.insertBefore(draggableCloneNode, draggableNode)
 
   storageDraggableNode.innerHTML = ''

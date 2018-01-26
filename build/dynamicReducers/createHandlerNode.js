@@ -11,6 +11,8 @@ const createHandlerNode = (memo) => {
     findParentNodes(universalEvent.target, config.isHandlerNode)
   )
 
+  handlerNode.ondragstart = () => false
+
   return Object.assign({}, memo, { handlerNode })
 
 }

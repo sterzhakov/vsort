@@ -15460,6 +15460,10 @@ var createHandlerNode = function createHandlerNode(memo) {
 
   var handlerNode = B.last(findParentNodes(universalEvent.target, config.isHandlerNode));
 
+  handlerNode.ondragstart = function () {
+    return false;
+  };
+
   return Object.assign({}, memo, { handlerNode: handlerNode });
 };
 
@@ -15497,6 +15501,10 @@ var createDraggableNode = function createDraggableNode(memo) {
   var draggableNode = B.last(findParentNodes(universalEvent.target, config.isDraggableNode));
 
   var draggableCloneNode = draggableNode.cloneNode(true);
+
+  draggableCloneNode.ondragstart = function () {
+    return false;
+  };
 
   draggableNode.parentNode.insertBefore(draggableCloneNode, draggableNode);
 
