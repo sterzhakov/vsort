@@ -18,7 +18,7 @@ class List extends Component {
         this.props.items.length
           ? null
           : li({
-              'data-sortable-empty': 'true',
+              'data-vsort-empty': 'true',
               class: 'sort__item',
               key: 'empty',
             },

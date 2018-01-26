@@ -60,7 +60,7 @@ const createSortable = (statedConfig = {}) => {
     domNode.parentNode.isSameNode(rootNode)
   )
 
-  const isEmptyNode = (domNode) => domNode.dataset.sortableEmpty == 'true'
+  const isEmptyNode = domNode => domNode.dataset.vsortEmpty == 'true'
 
   const defaultConfig = {
     name: 'root',
@@ -72,10 +72,8 @@ const createSortable = (statedConfig = {}) => {
     isHandlerNode: isDraggableNode,
     isDroppableNode,
     isEmptyNode,
-    ghostClassName: 'sortable__ghost',
-    draggableClassName: 'sortable__draggable',
-    touchEvents: true,
-    mouseEvents: true,
+    ghostClassName: 'vsort__ghost',
+    draggableClassName: 'vsort__draggable',
     cloneRootNode: true,
     scrollNode: null,
     scrollFill: 50,

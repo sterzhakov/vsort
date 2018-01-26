@@ -44,7 +44,6 @@ const createDroppablePosition = (memo) => {
 
   })()
 
-
   return Object.assign({}, memo, { droppablePosition })
 
 }

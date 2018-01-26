@@ -400,7 +400,7 @@ class List extends Component {
         this.props.items.length
           ? null
           : li({
-              'data-sortable-empty': 'true',
+              'data-vsort-empty': 'true',
               class: 'sort__item',
               key: 'empty',
             },
@@ -809,7 +809,7 @@ const createSortable = (statedConfig = {}) => {
     domNode.parentNode.isSameNode(rootNode)
   )
 
-  const isEmptyNode = (domNode) => domNode.dataset.sortableEmpty == 'true'
+  const isEmptyNode = domNode => domNode.dataset.vsortEmpty == 'true'
 
   const defaultConfig = {
     name: 'root',
@@ -821,10 +821,8 @@ const createSortable = (statedConfig = {}) => {
     isHandlerNode: isDraggableNode,
     isDroppableNode,
     isEmptyNode,
-    ghostClassName: 'sortable__ghost',
-    draggableClassName: 'sortable__draggable',
-    touchEvents: true,
-    mouseEvents: true,
+    ghostClassName: 'vsort__ghost',
+    draggableClassName: 'vsort__draggable',
     cloneRootNode: true,
     scrollNode: null,
     scrollFill: 50,
@@ -4660,14 +4658,14 @@ class PageVertical extends Component {
 
   afterMount() {
 
-    this.sortable = createSortable({
+    this.vsort = createSortable({
       rootNode: this.refs.List.refs.list,
       align: 'vertical',
       isHandlerNode: domNode => domNode.textContent == '#',
       scrollNode: document.querySelector('.sort__wrapper'),
     })
 
-    this.sortable.subscribe((memo) => {
+    this.vsort.subscribe((memo) => {
 
       const { isNewPosition, draggablePosition, droppablePosition } = memo
 
@@ -4689,7 +4687,7 @@ class PageVertical extends Component {
 
   beforeUnmount() {
 
-    this.sortable.unsubscribe()
+    this.vsort.unsubscribe()
 
   }
 
@@ -5332,14 +5330,14 @@ class PageHorizontal extends Component {
 
   afterMount() {
 
-    this.sortable = createSortable({
+    this.vsort = createSortable({
       rootNode: this.refs.List.refs.list,
       align: this.props.align,
       isHandlerNode: domNode => domNode.textContent == '#',
       scrollNode: document.querySelector('.sort__wrapper'),
     })
 
-    this.sortable.subscribe((memo) => {
+    this.vsort.subscribe((memo) => {
 
       const { isNewPosition, draggablePosition, droppablePosition } = memo
 
@@ -5361,7 +5359,7 @@ class PageHorizontal extends Component {
 
   beforeUnmount() {
 
-    this.sortable.unsubscribe()
+    this.vsort.unsubscribe()
 
   }
 
@@ -5407,14 +5405,14 @@ class PageScroll extends Component {
 
   afterMount() {
 
-    this.sortable = createSortable({
+    this.vsort = createSortable({
       rootNode: this.refs.List.refs.list,
       align: this.props.align,
       isHandlerNode: domNode => domNode.textContent == '#',
       scrollNode: document.querySelector('.sort__wrapper'),
     })
 
-    this.sortable.subscribe((memo) => {
+    this.vsort.subscribe((memo) => {
 
       const { isNewPosition, draggablePosition, droppablePosition } = memo
 
@@ -5436,7 +5434,7 @@ class PageScroll extends Component {
 
   beforeUnmount() {
 
-    this.sortable.unsubscribe()
+    this.vsort.unsubscribe()
 
   }
 
@@ -5482,7 +5480,7 @@ class PageMultiple extends Component {
     super(props, context)
 
     this.state = {
-      users_1: User.getAll().slice(0, 1),
+      users_1: User.getAll().slice(0, 0),
       users_2: User.getAll().slice(2, 5),
       users_3: User.getAll().slice(10, 20),
     }
@@ -5493,7 +5491,7 @@ class PageMultiple extends Component {
 
     const numbers = B.times(3 + 1).slice(1)
 
-    this.sortables = numbers.map(number => {
+    this.vsorts = numbers.map(number => {
 
       const depends = numbers
         .filter(_number => _number != number)
@@ -5506,7 +5504,7 @@ class PageMultiple extends Component {
 
         })
 
-      const sortableConfig = {
+      const vsortConfig = {
         name: 'users_' + number,
         depends,
         rootNode: this.refs['List' + number].refs.list,
@@ -5515,9 +5513,9 @@ class PageMultiple extends Component {
         scrollNode: document.querySelector('.sort__wrapper'),
       }
 
-      const sortable = createSortable(sortableConfig)
+      const vsort = createSortable(vsortConfig)
 
-      sortable.subscribe((memo) => {
+      vsort.subscribe((memo) => {
 
         const {
           isNewPosition,
@@ -5566,7 +5564,7 @@ class PageMultiple extends Component {
 
       })
 
-      return sortable
+      return vsort
 
     })
 
@@ -5574,7 +5572,7 @@ class PageMultiple extends Component {
 
   beforeUnmount() {
 
-    this.sortables.forEach(sortable => sortable.unsubscribe())
+    this.vsorts.forEach(vsort => vsort.unsubscribe())
 
   }
 
@@ -5959,7 +5957,6 @@ const createDroppablePosition = (memo) => {
     ) + groupIndex
 
   })()
-
 
   return Object.assign({}, memo, { droppablePosition })
 

@@ -19,14 +19,14 @@ class PageHorizontal extends Component {
 
   afterMount() {
 
-    this.sortable = createSortable({
+    this.vsort = createSortable({
       rootNode: this.refs.List.refs.list,
       align: this.props.align,
       isHandlerNode: domNode => domNode.textContent == '#',
       scrollNode: document.querySelector('.sort__wrapper'),
     })
 
-    this.sortable.subscribe((memo) => {
+    this.vsort.subscribe((memo) => {
 
       const { isNewPosition, draggablePosition, droppablePosition } = memo
 
@@ -48,7 +48,7 @@ class PageHorizontal extends Component {
 
   beforeUnmount() {
 
-    this.sortable.unsubscribe()
+    this.vsort.unsubscribe()
 
   }
 

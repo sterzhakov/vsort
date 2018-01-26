@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sterjakovigor/vsort.git"
+    "url": "git+https://github.com/sterzhakov/vsort.git"
   },
   "keywords": [
     "sortable",
@@ -24,9 +24,9 @@
   "author": "Igor Sterzhakov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sterjakovigor/vsort/issues"
+    "url": "https://github.com/sterzhakov/vsort/issues"
   },
-  "homepage": "https://github.com/sterjakovigor/vsort#readme",
+  "homepage": "https://github.com/sterzhakov/vsort#readme",
   "devDependencies": {
     "jasmine": "^2.8.0"
   },

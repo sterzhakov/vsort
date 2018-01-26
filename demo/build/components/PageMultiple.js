@@ -12,7 +12,7 @@ class PageMultiple extends Component {
     super(props, context)
 
     this.state = {
-      users_1: User.getAll().slice(0, 1),
+      users_1: User.getAll().slice(0, 0),
       users_2: User.getAll().slice(2, 5),
       users_3: User.getAll().slice(10, 20),
     }
@@ -23,7 +23,7 @@ class PageMultiple extends Component {
 
     const numbers = B.times(3 + 1).slice(1)
 
-    this.sortables = numbers.map(number => {
+    this.vsorts = numbers.map(number => {
 
       const depends = numbers
         .filter(_number => _number != number)
@@ -36,7 +36,7 @@ class PageMultiple extends Component {
 
         })
 
-      const sortableConfig = {
+      const vsortConfig = {
         name: 'users_' + number,
         depends,
         rootNode: this.refs['List' + number].refs.list,
@@ -45,9 +45,9 @@ class PageMultiple extends Component {
         scrollNode: document.querySelector('.sort__wrapper'),
       }
 
-      const sortable = createSortable(sortableConfig)
+      const vsort = createSortable(vsortConfig)
 
-      sortable.subscribe((memo) => {
+      vsort.subscribe((memo) => {
 
         const {
           isNewPosition,
@@ -96,7 +96,7 @@ class PageMultiple extends Component {
 
       })
 
-      return sortable
+      return vsort
 
     })
 
@@ -104,7 +104,7 @@ class PageMultiple extends Component {
 
   beforeUnmount() {
 
-    this.sortables.forEach(sortable => sortable.unsubscribe())
+    this.vsorts.forEach(vsort => vsort.unsubscribe())
 
   }
 
