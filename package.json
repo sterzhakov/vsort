@@ -1,7 +1,7 @@
 {
   "name": "vsort",
   "version": "1.0.0",
-  "description": "Sortable for any virtual dom.",
+  "description": "Sortable lists for any virtual dom.",
   "main": "index.js",
   "scripts": {
     "test": "jasmine"
