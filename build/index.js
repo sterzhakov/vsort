@@ -74,7 +74,7 @@ const createSortable = (statedConfig = {}) => {
     isEmptyNode,
     ghostClassName: 'vsort__ghost',
     draggableClassName: 'vsort__draggable',
-    cloneRootNode: true,
+    cloneRootNode: false,
     scrollNode: null,
     scrollFill: 50,
     scrollSpeed: 5,

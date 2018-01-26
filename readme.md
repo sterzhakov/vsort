@@ -199,7 +199,7 @@ Array of functions that update memo on every event change
 #### storageWrapperNode [HTMLElement]
 default: document.body
 
-Parent node for store ghostNode and draggableCloneNode
+Parent node for store ghostNode and draggableNode
 
 
 ## Memo [Object]
@@ -280,6 +280,7 @@ Example:
 [{ name: 'example', node: HTMLElement }]
 ```
 The name is taken from config.name
+
 The node is taken from config.rootNode
 
 #### scrollActions [Array]
@@ -448,4 +449,4 @@ Array of functions that update memo on every event change
 #### storageWrapperNode [HTMLElement]
 default: document.body
 
-Parent node for store ghostNode and draggableCloneNode
+Parent node for store ghostNode and draggableNode
