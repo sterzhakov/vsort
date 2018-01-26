@@ -2,7 +2,7 @@
 
 ![vqua](https://raw.githubusercontent.com/sterzhakov/vsort/master/logo.jpg)
 
-Sortable list library which support all virtual dom libraries like React, Angular, Vue and others.
+Sortable lists library which support all virtual dom libraries like React, Angular, Vue and others.
 
 It simply tells you the new position of the element.
 
@@ -46,11 +46,11 @@ More:
 
 [Horizontal](https://github.com/sterzhakov/vsort/tree/master/demo/build/components/PageHorizontal.js)
 
-[Vertical](https://github.com/sterzhakov/vsort/tree/master/demo/build/components/PageHorizontal.js)
+[Vertical](https://github.com/sterzhakov/vsort/tree/master/demo/build/components/PageVertical.js)
 
-[Multiple](https://github.com/sterzhakov/vsort/tree/master/demo/build/components/PageHorizontal.js)
+[Multiple](https://github.com/sterzhakov/vsort/tree/master/demo/build/components/PageMultiple.js)
 
-[Scroll](https://github.com/sterzhakov/vsort/tree/master/demo/build/components/PageHorizontal.js)
+[Scroll](https://github.com/sterzhakov/vsort/tree/master/demo/build/components/PageScroll.js)
 
 ## Vsort [Stream]
 

@@ -4548,9 +4548,22 @@ class App extends Component {
       this.state.pages[0]
     )
 
-    const { h1, div, br } = html
+    const { h1, div, br, a, p } = html
 
     return [
+      div({ class: 'header' },
+        a({
+          class: 'header__back',
+          href: 'https://github.com/sterzhakov/vsort'
+        },
+          'Back to github'
+        ),
+        p({
+          class: 'header__description',
+        },
+          'Drag elements by #'
+        )
+      ),
       div({ class: 'sidebar' },
         Menu.v({
           items: this.state.pages,

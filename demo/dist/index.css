@@ -12,6 +12,20 @@ h1 {
   font-size: 24px;
 }
 
+.header {
+  margin: 0px 0px 20px;
+}
+
+.header__back {
+  display: inline-block;
+  width: 200px;
+}
+
+.header__description {
+  display: inline;
+  margin-left: 20px;
+}
+
 .sidebar {
   display: block;
   float: left;
