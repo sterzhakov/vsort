@@ -15460,9 +15460,12 @@ var createHandlerNode = function createHandlerNode(memo) {
 
   var handlerNode = B.last(findParentNodes(universalEvent.target, config.isHandlerNode));
 
-  handlerNode.ondragstart = function () {
-    return false;
-  };
+  if (handlerNode) {
+
+    handlerNode.ondragstart = function () {
+      return false;
+    };
+  }
 
   return Object.assign({}, memo, { handlerNode: handlerNode });
 };
