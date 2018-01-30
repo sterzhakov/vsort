@@ -19,7 +19,7 @@ class List extends Component {
           ? null
           : li({
               'data-vsort-empty': 'true',
-              class: 'sort__item',
+              class: 'sort__item noselect',
               key: 'empty',
             },
               'list is empty'
@@ -27,11 +27,11 @@ class List extends Component {
         this.props.items.map((item) => {
           return (
             li({
-              class: 'sort__item',
+              class: 'sort__item noselect',
               key: item.id.toString()
             },
               span({
-                class: 'sort__icon cursor-move'
+                class: 'sort__icon cursor-move noselect'
               },
                 '#'
               ),

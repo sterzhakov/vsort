@@ -19,13 +19,16 @@ const createDroppablePosition = (memo) => {
   const droppableIndex = droppableRootChilds
     .findIndex(domNode => domNode.isSameNode(droppableNode))
 
+
   const droppablePosition = (() => {
 
     if (config.isEmptyNode(droppableNode)) return 0
 
     const groupIndex = (
       droppableGroup.name != rootGroup.name &&
-      droppableNode.nextSibling
+      droppableNode.nextSibling ||
+      droppableGroup.name != rootGroup.name &&
+      droppableAlign == 'before'
     ) ? 1 : 0
 
     return (

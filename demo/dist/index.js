@@ -1777,14 +1777,14 @@ var List = function (_Component) {
         })
       }, this.props.items.length ? null : li({
         'data-vsort-empty': 'true',
-        class: 'sort__item',
+        class: 'sort__item noselect',
         key: 'empty'
       }, 'list is empty'), this.props.items.map(function (item) {
         return li({
-          class: 'sort__item',
+          class: 'sort__item noselect',
           key: item.id.toString()
         }, span({
-          class: 'sort__icon cursor-move'
+          class: 'sort__icon cursor-move noselect'
         }, '#'), ' ', item.name);
       }));
     }
@@ -14877,7 +14877,7 @@ var createDroppablePosition = function createDroppablePosition(memo) {
 
     if (config.isEmptyNode(droppableNode)) return 0;
 
-    var groupIndex = droppableGroup.name != rootGroup.name && droppableNode.nextSibling ? 1 : 0;
+    var groupIndex = droppableGroup.name != rootGroup.name && droppableNode.nextSibling || droppableGroup.name != rootGroup.name && droppableAlign == 'before' ? 1 : 0;
 
     return (droppableAlign == 'before' ? droppableIndex < draggablePosition ? droppableIndex : droppableIndex - 1 : droppableIndex < draggablePosition ? droppableIndex + 1 : droppableIndex) + groupIndex;
   }();
