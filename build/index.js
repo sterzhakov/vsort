@@ -39,6 +39,7 @@ const dynamicReducers = [
   require('./dynamicReducers/createDraggableShift'),
   require('./dynamicReducers/createGhostRootNode'),
   require('./dynamicReducers/createGhostNode'),
+  require('./dynamicReducers/createDraggableCloneNode'),  
   require('./dynamicReducers/createDragType'),
   require('./dynamicReducers/createDragStart'),
   require('./dynamicReducers/createPrevDragStart'),

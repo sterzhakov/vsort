@@ -2498,7 +2498,7 @@ var TouchcancelSource = __webpack_require__(429);
 
 var staticReducers = [__webpack_require__(430), __webpack_require__(431), __webpack_require__(432), __webpack_require__(433), __webpack_require__(434)];
 
-var dynamicReducers = [__webpack_require__(435), __webpack_require__(437), __webpack_require__(438), __webpack_require__(439), __webpack_require__(440), __webpack_require__(441), __webpack_require__(442), __webpack_require__(443), __webpack_require__(444), __webpack_require__(446), __webpack_require__(447), __webpack_require__(448), __webpack_require__(449), __webpack_require__(450), __webpack_require__(451), __webpack_require__(452), __webpack_require__(453), __webpack_require__(454), __webpack_require__(455), __webpack_require__(456), __webpack_require__(457), __webpack_require__(458), __webpack_require__(459), __webpack_require__(460), __webpack_require__(461), __webpack_require__(462), __webpack_require__(463), __webpack_require__(464)];
+var dynamicReducers = [__webpack_require__(435), __webpack_require__(437), __webpack_require__(438), __webpack_require__(439), __webpack_require__(440), __webpack_require__(441), __webpack_require__(442), __webpack_require__(443), __webpack_require__(444), __webpack_require__(446), __webpack_require__(447), __webpack_require__(448), __webpack_require__(449), __webpack_require__(450), __webpack_require__(451), __webpack_require__(452), __webpack_require__(453), __webpack_require__(454), __webpack_require__(455), __webpack_require__(469), __webpack_require__(456), __webpack_require__(457), __webpack_require__(458), __webpack_require__(459), __webpack_require__(460), __webpack_require__(461), __webpack_require__(462), __webpack_require__(463), __webpack_require__(464)];
 
 var createSortable = function createSortable() {
   var statedConfig = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -14023,7 +14023,7 @@ var moveGhostNode = function moveGhostNode(memo) {
   var config = memo.config,
       dragType = memo.dragType,
       ghostNode = memo.ghostNode,
-      draggableNode = memo.draggableNode,
+      draggableCloneNode = memo.draggableCloneNode,
       ghostCoords = memo.ghostCoords,
       ghostRootNode = memo.ghostRootNode,
       storageGhostNode = memo.storageGhostNode;
@@ -14034,7 +14034,7 @@ var moveGhostNode = function moveGhostNode(memo) {
     case DRAG_START:
       {
 
-        draggableNode.classList.add(config.draggableClassName);
+        draggableCloneNode.classList.add(config.draggableClassName);
 
         if (config.cloneRootNode) {
 
@@ -14062,7 +14062,7 @@ var moveGhostNode = function moveGhostNode(memo) {
     case DRAG_STOP:
       {
 
-        draggableNode.classList.remove(config.draggableClassName);
+        draggableCloneNode.classList.remove(config.draggableClassName);
 
         var removeNode = config.cloneRootNode ? ghostRootNode : ghostNode;
 
@@ -14858,7 +14858,6 @@ var createDroppablePosition = function createDroppablePosition(memo) {
       dragType = memo.dragType,
       droppableNode = memo.droppableNode,
       droppableAlign = memo.droppableAlign,
-      draggableNode = memo.draggableNode,
       isDroppableNew = memo.isDroppableNew,
       draggablePosition = memo.draggablePosition,
       droppableGroup = memo.droppableGroup,
@@ -14896,7 +14895,7 @@ module.exports = createDroppablePosition;
 
 var createDraggablePosition = function createDraggablePosition(memo) {
   var config = memo.config,
-      draggableNode = memo.draggableNode,
+      draggableCloneNode = memo.draggableCloneNode,
       isDroppableNew = memo.isDroppableNew,
       rootGroup = memo.rootGroup;
 
@@ -14906,7 +14905,7 @@ var createDraggablePosition = function createDraggablePosition(memo) {
   var sortableDomNodes = Array.from(rootGroup.node.childNodes);
 
   var draggablePosition = sortableDomNodes.findIndex(function (domNode) {
-    return domNode.isSameNode(draggableNode);
+    return domNode.isSameNode(draggableCloneNode);
   });
 
   return Object.assign({}, memo, { draggablePosition: draggablePosition });
@@ -14926,14 +14925,14 @@ var _require = __webpack_require__(12),
 
 var checkIsDroppableNew = function checkIsDroppableNew(memo) {
   var dragType = memo.dragType,
-      droppableNode = memo.droppableNode,
       prevDroppableNode = memo.prevDroppableNode,
       droppableAlign = memo.droppableAlign,
       prevDroppableAlign = memo.prevDroppableAlign,
-      draggableNode = memo.draggableNode;
+      droppableNode = memo.droppableNode,
+      draggableCloneNode = memo.draggableCloneNode;
 
 
-  var droppableIsDraggableNode = droppableNode && droppableNode.isSameNode(draggableNode);
+  var droppableIsDraggableNode = droppableNode && droppableNode.isSameNode(draggableCloneNode);
 
   if (!droppableNode || droppableIsDraggableNode || dragType != DRAG_MOVE) {
 
@@ -15231,7 +15230,7 @@ var _require = __webpack_require__(12),
 var getShift = __webpack_require__(157);
 
 var createDraggableShift = function createDraggableShift(memo) {
-  var draggableNode = memo.draggableNode,
+  var draggableCloneNode = memo.draggableCloneNode,
       startUniversalEvent = memo.startUniversalEvent,
       config = memo.config,
       dragType = memo.dragType;
@@ -15239,7 +15238,7 @@ var createDraggableShift = function createDraggableShift(memo) {
 
   if (dragType != DRAG_START) return memo;
 
-  var draggableShift = getShift(draggableNode, startUniversalEvent);
+  var draggableShift = getShift(draggableCloneNode, startUniversalEvent);
 
   return Object.assign({}, memo, { draggableShift: draggableShift });
 };
@@ -15284,13 +15283,13 @@ var createGhostNode = function createGhostNode(memo) {
 
   if (memo.dragType != DRAG_START) return memo;
 
-  var draggableNode = memo.draggableNode,
+  var draggableCloneNode = memo.draggableCloneNode,
       config = memo.config;
 
 
-  var ghostNode = draggableNode.cloneNode(true);
+  var ghostNode = draggableCloneNode.cloneNode(true);
 
-  var boundings = draggableNode.getBoundingClientRect();
+  var boundings = draggableCloneNode.getBoundingClientRect();
 
   ghostNode.style.position = 'absolute';
   ghostNode.style.zIndex = 1000;
@@ -15492,30 +15491,15 @@ var createDraggableNode = function createDraggableNode(memo) {
       storageDraggableNode = memo.storageDraggableNode;
 
 
-  if (isNewPosition && prevRootGroup.name != rootGroup.name) {
-
-    var _draggableNode = rootGroup.node.childNodes[droppablePosition];
-
-    return Object.assign({}, memo, { draggableNode: _draggableNode });
-  }
-
   if (universalEvent.type != 'start') return memo;
 
   var draggableNode = B.last(findParentNodes(universalEvent.target, config.isDraggableNode));
 
-  var draggableCloneNode = draggableNode.cloneNode(true);
-
-  draggableCloneNode.ondragstart = function () {
+  draggableNode.ondragstart = function () {
     return false;
   };
 
-  draggableNode.parentNode.insertBefore(draggableCloneNode, draggableNode);
-
-  storageDraggableNode.innerHTML = '';
-  storageDraggableNode.appendChild(draggableNode);
-  draggableNode.style.display = 'none';
-
-  return Object.assign({}, memo, { draggableNode: draggableCloneNode });
+  return Object.assign({}, memo, { draggableNode: draggableNode });
 };
 
 module.exports = createDraggableNode;
@@ -16014,6 +15998,52 @@ var PageMultiple = function (_Component) {
 }(Component);
 
 module.exports = PageMultiple;
+
+/***/ }),
+/* 469 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _require = __webpack_require__(12),
+    DRAG_START = _require.DRAG_START;
+
+var createDraggableCloneNode = function createDraggableCloneNode(memo) {
+  var dragType = memo.dragType,
+      draggableNode = memo.draggableNode,
+      storageDraggableNode = memo.storageDraggableNode,
+      rootGroup = memo.rootGroup,
+      prevRootGroup = memo.prevRootGroup,
+      isNewPosition = memo.isNewPosition,
+      droppablePosition = memo.droppablePosition;
+
+
+  if (isNewPosition && prevRootGroup.name != rootGroup.name) {
+
+    var _draggableCloneNode = rootGroup.node.childNodes[droppablePosition];
+
+    return Object.assign({}, memo, { draggableCloneNode: _draggableCloneNode });
+  }
+
+  if (dragType != DRAG_START) return memo;
+
+  var draggableCloneNode = draggableNode.cloneNode(true);
+
+  draggableCloneNode.ondragstart = function () {
+    return false;
+  };
+
+  draggableNode.parentNode.insertBefore(draggableCloneNode, draggableNode);
+
+  storageDraggableNode.innerHTML = '';
+  storageDraggableNode.appendChild(draggableNode);
+  draggableNode.style.display = 'none';
+
+  return Object.assign({}, memo, { draggableCloneNode: draggableCloneNode });
+};
+
+module.exports = createDraggableCloneNode;
 
 /***/ })
 /******/ ]);

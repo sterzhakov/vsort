@@ -5,7 +5,6 @@ const createDroppablePosition = (memo) => {
     dragType,
     droppableNode,
     droppableAlign,
-    draggableNode,
     isDroppableNew,
     draggablePosition,
     droppableGroup,
@@ -18,7 +17,6 @@ const createDroppablePosition = (memo) => {
 
   const droppableIndex = droppableRootChilds
     .findIndex(domNode => domNode.isSameNode(droppableNode))
-
 
   const droppablePosition = (() => {
 

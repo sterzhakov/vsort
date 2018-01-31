@@ -7,7 +7,7 @@ const moveGhostNode = (memo) => {
     config,
     dragType,
     ghostNode,
-    draggableNode,
+    draggableCloneNode,
     ghostCoords,
     ghostRootNode,
     storageGhostNode,
@@ -17,7 +17,7 @@ const moveGhostNode = (memo) => {
 
     case DRAG_START: {
 
-      draggableNode.classList.add(config.draggableClassName)
+      draggableCloneNode.classList.add(config.draggableClassName)
 
       if (config.cloneRootNode) {
 
@@ -45,7 +45,7 @@ const moveGhostNode = (memo) => {
 
     case DRAG_STOP: {
 
-      draggableNode.classList.remove(config.draggableClassName)
+      draggableCloneNode.classList.remove(config.draggableClassName)
 
       const removeNode = config.cloneRootNode ? ghostRootNode : ghostNode
 

@@ -4,11 +4,11 @@ const createGhostNode = (memo) => {
 
   if (memo.dragType != DRAG_START) return memo
 
-  const { draggableNode, config } = memo
+  const { draggableCloneNode, config } = memo
 
-  const ghostNode = draggableNode.cloneNode(true)
+  const ghostNode = draggableCloneNode.cloneNode(true)
 
-  const boundings = draggableNode.getBoundingClientRect()
+  const boundings = draggableCloneNode.getBoundingClientRect()
 
   ghostNode.style.position = 'absolute'
   ghostNode.style.zIndex = 1000

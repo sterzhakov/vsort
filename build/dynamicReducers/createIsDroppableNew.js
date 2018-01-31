@@ -4,16 +4,16 @@ const checkIsDroppableNew = (memo) => {
 
   const {
     dragType,
-    droppableNode,
     prevDroppableNode,
     droppableAlign,
     prevDroppableAlign,
-    draggableNode,
+    droppableNode,
+    draggableCloneNode
   } = memo
 
   const droppableIsDraggableNode = (
     droppableNode &&
-    droppableNode.isSameNode(draggableNode)
+    droppableNode.isSameNode(draggableCloneNode)
   )
 
   if (!droppableNode || droppableIsDraggableNode || dragType != DRAG_MOVE) {
